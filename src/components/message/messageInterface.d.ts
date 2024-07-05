@@ -1,4 +1,4 @@
-import { ListItemInterface } from '../../../list/components/listItem/listItemInterface';
+import { ListItemInterface } from '@arpadroid/lists/src/listItem/listItemInterface.d.ts';
 
 export interface MessageInterface extends ListItemInterface {
     text?: string;
