@@ -57,7 +57,12 @@ class Message extends ListItem {
     }
 
     getContent() {
-        return (super.getContent() ?? this.getProperty('text')) || this.getProperty('i18n');
+        return (super.getContent() ?? this.getProperty('text')) || this.getI18nContent();
+    }
+
+    getI18nContent() {
+        const i18nKey = this.getProperty('i18n');
+        return i18nKey ? html`<i18n-text key="${i18nKey}"></i18n-text>` : '';
     }
 
     // #endregion
