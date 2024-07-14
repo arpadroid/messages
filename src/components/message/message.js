@@ -23,12 +23,9 @@ class Message extends ListItem {
         });
     }
 
-    _initialize() {
+    async initializeProperties() {
+        super.initializeProperties();
         this._onClose = this._onClose.bind(this);
-        super._initialize();
-    }
-
-    _initializeProperties() {
         this.messagesComponent = this.closest('arpa-messages');
         /** @type {MessageResource} */
         this.resource = this._config.resource ?? this.messagesComponent?.resource;

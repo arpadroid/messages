@@ -42,8 +42,9 @@ class Messages extends ArpaElement {
 
     _initializeResource() {
         if (!this.resource) {
+            const id = this.getProperty('id');
             /** @type { MessageResource } */
-            this.resource = new MessageResource({ id: this.getProperty('id') });
+            this.resource = new MessageResource({ id });
             this.resource.listen('DELETE_MESSAGE', message => message?.node?.remove());
             this.resource.listen('DELETE_MESSAGES', () => (this.innerHTML = ''));
             this.resource.listen('ADD_MESSAGE', this.onResourceAddMessage);
