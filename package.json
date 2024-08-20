@@ -45,6 +45,7 @@
         "@arpadroid/application": "file:../application",
         "@arpadroid/tools": "file:../tools",
         "@arpadroid/ui": "file:../ui",
-        "@arpadroid/i18n": "file:../i18n"
+        "@arpadroid/i18n": "file:../i18n",
+        "@arpadroid/resources": "file:../resources"
     }
 }

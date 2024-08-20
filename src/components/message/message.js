@@ -1,6 +1,6 @@
 /**
  * @typedef {import('./messageInterface.js').MessageInterface} MessageInterface
- * @typedef {import('@arpadroid/application/src/index.js').MessageResource} MessageResource
+ * @typedef {import('@arpadroid/resources/src').MessageResource} MessageResource
  */
 import { mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';

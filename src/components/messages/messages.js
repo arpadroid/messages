@@ -3,7 +3,7 @@
  * @typedef {import('../message/messageInterface').MessageInterface} MessageInterface
  */
 import { mergeObjects } from '@arpadroid/tools';
-import { MessageResource } from '@arpadroid/application';
+import { MessageResource } from '@arpadroid/resources';
 import { ArpaElement } from '@arpadroid/ui';
 
 class Messages extends ArpaElement {
