@@ -7,7 +7,6 @@ const MessageStory = {
     tags: [],
     getArgs: () => {
         return {
-            
             canClose: false,
             closeLabel: undefined,
             timeout: 0,
@@ -100,7 +99,7 @@ export const Test = {
         const canvas = within(canvasElement);
         await customElements.whenDefined('arpa-message');
         const messageNode = canvasElement.querySelector('arpa-message');
-        await waitFor(() => canvas.getByRole('button'));
+        await messageNode.load;
         return { canvas, messageNode };
     },
     play: async ({ canvasElement, step }) => {
@@ -109,9 +108,12 @@ export const Test = {
         await step('Renders the message', () => {
             expect(canvas.getByText('This is a test message')).toBeTruthy();
         });
-        const deleteButton = canvas.getByRole('button', { name: 'Delete test message' });
-        await step('Renders the close button', () => {
-            expect(deleteButton).toBeTruthy();
+        let deleteButton;
+        await step('Renders the close button', async () => {
+            await waitFor(() => {
+                deleteButton = canvas.getByRole('button', { name: 'Delete test message' });
+                expect(deleteButton).toBeTruthy();
+            });
         });
         const longMessage = 'This is a test message with a lot of text larger than 30 characters';
         const truncatedMessage = longMessage.slice(0, 30).trim();
@@ -128,7 +130,7 @@ export const Test = {
         );
 
         await step('Clicks on read more button and checks that text is not truncated', async () => {
-            fireEvent.click(canvas.getByRole('button', { name: 'Read more' }));
+            await fireEvent.click(canvas.getByRole('button', { name: 'Read more' }));
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
             });
