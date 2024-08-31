@@ -54,7 +54,7 @@ class Message extends ListItem {
     }
 
     getContent() {
-        return (super.getContent() ?? this.getProperty('text')) || this.getI18nContent();
+        return (super.getContent() || this.getProperty('text')) || this.getI18nContent();
     }
 
     getI18nContent() {
