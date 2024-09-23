@@ -9,7 +9,7 @@
 .message.message {
     align-items: center;
     border-left: 5px solid var(--msg-border-color);
-    border-radius: 12px;
+    border-radius: .5rem;
     background-color: var(--msg-bg);
     list-style-type: none;
     font-weight: 500;
