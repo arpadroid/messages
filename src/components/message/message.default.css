@@ -16,6 +16,7 @@
     font-size: 13px;
     color: var(--grey-700);
     gap: 4px;
+    padding: .75rem;
     
     transition: var(--theme-transition);
     box-shadow: var(--box-shadow);
@@ -23,6 +24,7 @@
     arpa-icon.icon {
         color: var(--msg-icon-color);
         font-size: 22px;
+        align-self: flex-start;
     }
 
     > .listItem__rhs {
@@ -31,6 +33,11 @@
 
     > .listItem__main {
         padding: .75rem .45rem;
+        gap: .5rem;
+    }
+
+    .listItem__main {
+        padding: 0;
     }
 }
 
@@ -64,7 +71,6 @@ button.message__closeButton {
     border: none !important;
     align-self: flex-start;
     padding: 8px;
-    margin-top: 3px;
 }
 
 button.message__closeButton:hover,
