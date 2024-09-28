@@ -42,15 +42,15 @@
 }
 
 info-message.message {
-    --msg-border-color: var(--color-blue-navy);
-    --msg-bg: var(--color-light-blue);
-    --msg-icon-color: var(--color-blue-navy);
+    --msg-border-color: var(--blue-navy);
+    --msg-bg: var(--blue-light);
+    --msg-icon-color: var(--blue-navy);
 }
 
 success-message.message {
-    --msg-border-color: var(--color-forest-green);
+    --msg-border-color: var(--green-forest);
     --msg-bg: var(--bg-light-green);
-    --msg-icon-color: var(--color-forest-green);
+    --msg-icon-color: var(--green-forest);
 }
 
 error-message.message {
@@ -60,9 +60,9 @@ error-message.message {
 }
 
 warning-message.message {
-    --msg-border-color: var(--color-orange);
-    --msg-bg: var(--color-light-orange);
-    --msg-icon-color: var(--color-orange);
+    --msg-border-color: var(--orange);
+    --msg-bg: var(--orange-light);
+    --msg-icon-color: var(--orange);
 }
 
 button.message__closeButton {
