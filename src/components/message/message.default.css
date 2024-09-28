@@ -54,9 +54,9 @@ success-message.message {
 }
 
 error-message.message {
-    --msg-border-color: var(--color-dark-red);
+    --msg-border-color: var(--red-dark);
     --msg-bg: var(--bg-light-red);
-    --msg-icon-color: var(--color-dark-red);
+    --msg-icon-color: var(--red-dark);
 }
 
 warning-message.message {

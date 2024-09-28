@@ -4,3 +4,7 @@ arpa-messages {
     gap: 8px;
     width: 100%;
 }
+
+arpa-messages:empty {
+    display: none;
+}
