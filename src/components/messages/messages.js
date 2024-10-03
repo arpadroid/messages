@@ -16,7 +16,6 @@ class Messages extends ArpaElement {
     /////////////////////////
 
     _bindMethods() {
-        super._bindMethods();
         this.onResourceAddMessage = this.onResourceAddMessage.bind(this);
     }
 
