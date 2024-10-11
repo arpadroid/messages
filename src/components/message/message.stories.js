@@ -137,6 +137,7 @@ export const Test = {
         });
 
         await step('Clicks on read less button and checks that text is truncated', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
             fireEvent.click(canvas.getByRole('button', { name: 'Read less' }));
             await waitFor(() => {
                 expect(canvas.getByText(truncatedMessage)).toBeTruthy();
