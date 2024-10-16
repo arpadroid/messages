@@ -14,11 +14,6 @@ class Messages extends ArpaElement {
     //////////////////////////
     // #region INITIALIZATION
     /////////////////////////
-
-    _bindMethods() {
-        this.onResourceAddMessage = this.onResourceAddMessage.bind(this);
-    }
-
     /**
      * Returns default config.
      * @returns {MessagesInterface}
@@ -32,6 +27,7 @@ class Messages extends ArpaElement {
     }
 
     _initialize() {
+        this.bind('onResourceAddMessage');
         const id = this.getProperty('id');
         if (!id) {
             throw new Error('Messages must have an id.');
