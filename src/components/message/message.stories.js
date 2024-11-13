@@ -130,7 +130,7 @@ export const Test = {
         );
 
         await step('Clicks on read more button and checks that text is not truncated', async () => {
-            await fireEvent.click(canvas.getByRole('button', { name: 'Read more' }));
+            await fireEvent.click(canvas.getByRole('button', { name: 'Read more.' }));
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
             });
@@ -138,7 +138,7 @@ export const Test = {
 
         await step('Clicks on read less button and checks that text is truncated', async () => {
             await new Promise(resolve => setTimeout(resolve, 100));
-            fireEvent.click(canvas.getByRole('button', { name: 'Read less' }));
+            fireEvent.click(canvas.getByRole('button', { name: 'Read less.' }));
             await waitFor(() => {
                 expect(canvas.getByText(truncatedMessage)).toBeTruthy();
                 expect(canvas.getByText('...')).toBeTruthy();
