@@ -24,7 +24,8 @@
     arpa-icon.icon {
         color: var(--msg-icon-color);
         font-size: 22px;
-        align-self: flex-start;
+        top: 2px;
+        align-self: center;
     }
 
     > .listItem__rhs {
