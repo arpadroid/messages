@@ -19,7 +19,8 @@ class Message extends ListItem {
             canClose: false,
             icon: 'chat_bubble',
             timeout: 0,
-            truncateContent: 190
+            truncateContent: 190,
+            listSelector: 'arpa-messages'
         });
     }
 
