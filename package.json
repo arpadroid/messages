@@ -41,7 +41,6 @@
         "typescript": "^5.4.2"
     },
     "peerDependencies": {
-        "@arpadroid/application": "file:../application",
         "@arpadroid/i18n": "file:../i18n",
         "@arpadroid/lists": "file:../lists",
         "@arpadroid/resources": "file:../resources",
