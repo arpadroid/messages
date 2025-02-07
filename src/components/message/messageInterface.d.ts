@@ -1,6 +1,6 @@
-import { ListItemInterface } from '../../types.compiled';
+import { ListItemConfigType } from '../../types.compiled';
 
-export interface MessageInterface extends ListItemInterface {
+export interface MessageInterface extends ListItemConfigType {
     text?: string;
     timeout?: number;
     canClose?: boolean;
