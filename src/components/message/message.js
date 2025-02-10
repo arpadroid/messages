@@ -1,17 +1,20 @@
 /**
- * @typedef {import('./messageInterface.js').MessageInterface} MessageInterface
- * @typedef {import('@arpadroid/resources/src').MessageResource} MessageResource
+ * @typedef {import('./message.types').MessageConfigType} MessageConfigType
+ * @typedef {import('@arpadroid/resources').MessageResource} MessageResource
+ * @typedef {import('../messages/messages.js').default} MessagesComponent
  */
 import { mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
 const html = String.raw;
 class Message extends ListItem {
+    /** @type {MessageConfigType} */ // @ts-ignore
+    _config = this._config;
     /////////////////////////
     // #region INITIALIZATION
     /////////////////////////
     /**
      * Returns the default config.
-     * @returns {MessageInterface}
+     * @returns {MessageConfigType}
      */
     getDefaultConfig() {
         return mergeObjects(super.getDefaultConfig(), {
@@ -24,12 +27,14 @@ class Message extends ListItem {
         });
     }
 
-    async initializeProperties() {
+    initializeProperties() {
         super.initializeProperties();
         this._onClose = this._onClose.bind(this);
+        /** @type {MessagesComponent | null} */
         this.messagesComponent = this.closest('arpa-messages');
         /** @type {MessageResource} */
         this.resource = this._config.resource ?? this.messagesComponent?.resource;
+        return true;
     }
 
     // #endregion
@@ -55,7 +60,7 @@ class Message extends ListItem {
     }
 
     getContent() {
-        return (super.getContent() || this.getProperty('text')) || this.getI18nContent();
+        return super.getContent() || this.getProperty('text') || this.getI18nContent();
     }
 
     getI18nContent() {
@@ -100,7 +105,7 @@ class Message extends ListItem {
         this.handleTimeout();
     }
 
-    _initializeNodes() {
+    async _initializeNodes() {
         super._initializeNodes();
         this.closeButton = this.querySelector('.message__closeButton');
         this.closeButton?.removeEventListener('click', this._onClose);
@@ -110,6 +115,7 @@ class Message extends ListItem {
     _initializeMessage() {
         const message = this.resource?.registerMessage(this._config, this);
         if (message) {
+            // @ts-ignore
             this._config.id = message.id;
             this._config.node = message.node;
         }

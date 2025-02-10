@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "A library of web components for showing user messages and notifications.",
     "exports": "./dist/arpadroid-messages.js",
-    "module": "./dist/arpadroid-messages.js",
+    "types": "./dist/@types/types.compiled.d.ts",
     "type": "module",
     "scripts": {
         "build": "node ./node_modules/@arpadroid/arpadroid/scripts/build-project.mjs --project=messages --minify",

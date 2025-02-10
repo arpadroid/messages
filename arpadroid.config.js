@@ -1,5 +1,5 @@
 const config = {
-    buildTypes: false
+    buildTypes: true
 };
 
 export default config;
