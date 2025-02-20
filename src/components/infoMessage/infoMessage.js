@@ -1,5 +1,5 @@
 import Message from '../message/message.js';
-import { mergeObjects } from '@arpadroid/tools';
+import { defineCustomElement, mergeObjects } from '@arpadroid/tools';
 
 class InfoMessage extends Message {
     getDefaultConfig() {
@@ -9,6 +9,6 @@ class InfoMessage extends Message {
     }
 }
 
-customElements.define('info-message', InfoMessage);
+defineCustomElement('info-message', InfoMessage);
 
 export default InfoMessage;

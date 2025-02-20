@@ -3,7 +3,7 @@
  * @typedef {import('@arpadroid/resources').MessageResource} MessageResource
  * @typedef {import('../messages/messages.js').default} MessagesComponent
  */
-import { mergeObjects, render } from '@arpadroid/tools';
+import { defineCustomElement, mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
 const html = String.raw;
 class Message extends ListItem {
@@ -143,6 +143,6 @@ class Message extends ListItem {
     }
 }
 
-customElements.define('arpa-message', Message);
+defineCustomElement('arpa-message', Message);
 
 export default Message;

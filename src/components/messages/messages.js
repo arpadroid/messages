@@ -4,7 +4,7 @@
  * @typedef {import('../message/message.js').default} Message
  * @typedef {import('@arpadroid/resources').MessageType} MessageType
  */
-import { mergeObjects } from '@arpadroid/tools';
+import { defineCustomElement, mergeObjects } from '@arpadroid/tools';
 import { MessageResource } from '@arpadroid/resources';
 import { ArpaElement } from '@arpadroid/ui';
 
@@ -119,6 +119,6 @@ class Messages extends ArpaElement {
     // #endregion
 }
 
-customElements.define('arpa-messages', Messages);
+defineCustomElement('arpa-messages', Messages);
 
 export default Messages;

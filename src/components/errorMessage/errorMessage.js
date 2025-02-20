@@ -1,5 +1,5 @@
 import Message from '../message/message.js';
-import { mergeObjects } from '@arpadroid/tools';
+import { defineCustomElement, mergeObjects } from '@arpadroid/tools';
 
 class ErrorMessage extends Message {
     getDefaultConfig() {
@@ -9,6 +9,6 @@ class ErrorMessage extends Message {
     }
 }
 
-customElements.define('error-message', ErrorMessage);
+defineCustomElement('error-message', ErrorMessage);
 
 export default ErrorMessage;
