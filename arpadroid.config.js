@@ -1,5 +1,9 @@
 const config = {
-    buildTypes: true
+    buildTypes: true,
+    logo: `           ┓    • ┓                
+  ┏┓┏┓┏┓┏┓┏┫┏┓┏┓┓┏┫  ┏┳┓┏┓┏┏┏┓┏┓┏┓┏
+  ┗┻┛ ┣┛┗┻┗┻┛ ┗┛┗┗┻  ┛┗┗┗ ┛┛┗┻┗┫┗ ┛
+------┛------------------------┛------`
 };
 
 export default config;
