@@ -1,6 +1,6 @@
 {
     "name": "@arpadroid/messages",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "A library of web components for showing user messages and notifications.",
     "exports": "./dist/arpadroid-messages.js",
     "types": "./dist/@types/types.compiled.d.ts",
@@ -28,8 +28,6 @@
     },
     "homepage": "https://github.com/arpadroid/messages#readme",
     "devDependencies": {
-        "@arpadroid/module": "../module",
-        "@arpadroid/stylesheet-bundler": "file:../stylesheet-bundler",
         "@babel/core": "^7.23.9",
         "@babel/plugin-syntax-import-assertions": "^7.23.3",
         "@babel/preset-env": "^7.23.9",
@@ -40,6 +38,8 @@
         "typescript": "^5.4.2"
     },
     "peerDependencies": {
+        "@arpadroid/module": "../module",
+        "@arpadroid/stylesheet-bundler": "file:../stylesheet-bundler",
         "@arpadroid/i18n": "file:../i18n",
         "@arpadroid/lists": "file:../lists",
         "@arpadroid/resources": "file:../resources",
