@@ -3,8 +3,11 @@ import { attrString } from '@arpadroid/tools';
 import { waitFor, expect, fireEvent, within } from '@storybook/test';
 const html = String.raw;
 const MessageStory = {
-    title: 'Modules/Messages/Message',
+    title: 'Messages/Message',
     tags: [],
+    parameters: {
+        layout: 'padded'
+    },
     getArgs: () => {
         return {
             canClose: false,

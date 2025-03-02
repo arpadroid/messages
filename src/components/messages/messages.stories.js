@@ -2,8 +2,11 @@ import { attrString } from '@arpadroid/tools';
 import { waitFor, expect, within } from '@storybook/test';
 const html = String.raw;
 const MessagesStory = {
-    title: 'Modules/Messages/Messages',
+    title: 'Messages/Messages',
     tags: [],
+    parameters: {
+        layout: 'padded'
+    },
     getArgs: () => {
         return {
             prependNewMessages: false
