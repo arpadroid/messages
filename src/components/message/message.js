@@ -7,7 +7,7 @@ import { defineCustomElement, mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
 const html = String.raw;
 class Message extends ListItem {
-    /** @type {MessageConfigType} */ // @ts-ignore
+    /** @type {MessageConfigType} */
     _config = this._config;
     /////////////////////////
     // #region INITIALIZATION
@@ -115,8 +115,7 @@ class Message extends ListItem {
     _initializeMessage() {
         const message = this.resource?.registerMessage(this._config, this);
         if (message) {
-            // @ts-ignore
-            this._config.id = message.id;
+            this._config.id = message.id?.toString();
             this._config.node = message.node;
         }
     }
