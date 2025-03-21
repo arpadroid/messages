@@ -82,13 +82,12 @@ class Message extends ListItem {
         const label = this.getProperty('close-label');
         return render(
             this.canClose(),
-            html`<button
-                is="icon-button"
+            html`<icon-button
                 class="message__closeButton"
                 icon="close"
                 variant="minimal"
                 label="${label}"
-            ></button>`
+            ></icon-button>`
         );
     }
 
