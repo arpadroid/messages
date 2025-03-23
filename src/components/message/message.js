@@ -109,6 +109,7 @@ class Message extends ListItem {
         this.closeButton = this.querySelector('.message__closeButton');
         this.closeButton?.removeEventListener('click', this._onClose);
         this.closeButton?.addEventListener('click', this._onClose);
+        return true;
     }
 
     _initializeMessage() {
