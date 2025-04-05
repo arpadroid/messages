@@ -3,7 +3,9 @@
     --msg-icon-color: var(--grey-600);
     --msg-success-bg: #d4ebce;
     --msg-bg: var(--grey-50);
+    --msg-color: var(--grey-700);
     --msg-border-color: var(--grey-400);
+    --msg-weight: 500;
 }
 
 .message.message {
@@ -14,18 +16,23 @@
     list-style-type: none;
     font-weight: 500;
     font-size: 13px;
-    color: var(--grey-700);
+    color: var(--msg-color);
     gap: 4px;
     padding: .75rem;
     
     transition: var(--theme-transition);
     box-shadow: var(--box-shadow);
 
+    .listItem__content {
+        color: var(--msg-color);
+        font-weight: var(--msg-weight);
+    }
+
     arpa-icon.icon {
         color: var(--msg-icon-color);
         font-size: 22px;
         top: 2px;
-        align-self: center;
+        align-self: flex-start;
     }
 
     > .listItem__rhs {
@@ -34,7 +41,7 @@
 
     > .listItem__main {
         padding: .75rem .45rem;
-        gap: .5rem;
+        gap: 1rem;
     }
 
     .listItem__main {

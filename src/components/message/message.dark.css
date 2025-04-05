@@ -1,0 +1,27 @@
+:root {
+    --msg-bg: var(--grey-150);
+    --msg-weight: 600;
+}
+
+success-message.message.message {
+    --msg-bg: var(--grey-150);
+    --msg-color: var(--green-forest);
+}
+
+info-message.message.message {
+    --msg-bg: var(--grey-150);
+    --msg-color: var(--color-primary);
+    --msg-icon-color: var(--color-primary);
+}
+
+
+warning-message.message {
+    --msg-bg: var(--grey-150);
+    --msg-color: var(--orange);
+}
+
+error-message.message {
+    --msg-bg: var(--grey-150);
+    --msg-color: var(--red);
+    --msg-icon-color: var(--red);
+}
