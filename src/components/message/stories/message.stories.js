@@ -1,4 +1,11 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import {
+    AmazingComputingFacts,
+    ApolloMission,
+    HistoryOfComputing,
+    SoftwareEngineer,
+    VideoGameHistory
+} from './templates.js';
 import { attrString } from '@arpadroid/tools';
 import { waitFor, expect, fireEvent, within } from '@storybook/test';
 const html = String.raw;
@@ -13,7 +20,7 @@ const MessageStory = {
             canClose: false,
             closeLabel: undefined,
             timeout: 0,
-            text: 'some message',
+            text: HistoryOfComputing,
             truncateContent: 190
         };
     },
@@ -52,7 +59,7 @@ export const InfoMessage = {
     argTypes: MessageStory.getArgTypes(),
     args: {
         ...MessageStory.getArgs(),
-        text: 'This is an info message'
+        text: AmazingComputingFacts
     },
     render: (args, story) => MessageStory.render(args, story, 'info-message')
 };
@@ -61,7 +68,7 @@ export const SuccessMessage = {
     argTypes: MessageStory.getArgTypes(),
     args: {
         ...MessageStory.getArgs(),
-        text: 'This is a success message'
+        text: ApolloMission
     },
     render: (args, story) => MessageStory.render(args, story, 'success-message')
 };
@@ -70,7 +77,7 @@ export const WarningMessage = {
     argTypes: MessageStory.getArgTypes(),
     args: {
         ...MessageStory.getArgs(),
-        text: 'This is a warning message'
+        text: VideoGameHistory
     },
     render: (args, story) => MessageStory.render(args, story, 'warning-message')
 };
@@ -79,7 +86,7 @@ export const ErrorMessage = {
     argTypes: MessageStory.getArgTypes(),
     args: {
         ...MessageStory.getArgs(),
-        text: 'This is an error message'
+        text: SoftwareEngineer
     },
     render: (args, story) => MessageStory.render(args, story, 'error-message')
 };
@@ -108,7 +115,11 @@ export const Test = {
     play: async ({ canvasElement, step }) => {
         const setup = await Test.playSetup(canvasElement);
         const { canvas, messageNode } = setup;
+
+        const ReadMoreButton = canvas.getByRole('button', { name: 'Read more' });
+
         await step('Renders the message', () => {
+            expect(ReadMoreButton).toBeInTheDocument();
             expect(canvas.getByText('This is a test message')).toBeTruthy();
         });
         let deleteButton;
@@ -120,6 +131,7 @@ export const Test = {
         });
         const longMessage = 'This is a test message with a lot of text larger than 30 characters';
         const truncatedMessage = longMessage.slice(0, 30).trim();
+        console.log('truncatedMessage', truncatedMessage);
         await step(
             'Sets a message to something longer than the truncateContent value abd checks that it is truncated',
             async () => {
@@ -133,7 +145,7 @@ export const Test = {
         );
 
         await step('Clicks on read more button and checks that text is not truncated', async () => {
-            await fireEvent.click(canvas.getByRole('button', { name: 'Read more' }));
+            ReadMoreButton.click();
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
             });
@@ -141,7 +153,7 @@ export const Test = {
 
         await step('Clicks on read less button and checks that text is truncated', async () => {
             await new Promise(resolve => setTimeout(resolve, 100));
-            fireEvent.click(canvas.getByRole('button', { name: 'Read less' }));
+            fireEvent.click(canvas.getByRole('button', { name: 'Read more' }));
             await waitFor(() => {
                 expect(canvas.getByText(truncatedMessage)).toBeTruthy();
                 expect(canvas.getByText('...')).toBeTruthy();
@@ -151,7 +163,10 @@ export const Test = {
         await step('Clicks on close button and checks that message is removed', async () => {
             expect(canvas.getByText(truncatedMessage)).toBeTruthy();
             fireEvent.click(deleteButton);
-            expect(canvas.queryByText(truncatedMessage)).toBeFalsy();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await waitFor(() => {
+                expect(canvas.queryByText(truncatedMessage)).toBeFalsy();
+            });
         });
     }
 };

@@ -17,7 +17,9 @@ info-message.message.message {
 
 warning-message.message {
     --msg-bg: var(--grey-150);
-    --msg-color: var(--orange);
+    --msg-color: var(--orange-flame);
+    --msg-icon-color: var(--orange-flame);
+    --msg-border-color: var(--orange-flame);
 }
 
 error-message.message {

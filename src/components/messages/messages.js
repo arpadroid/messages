@@ -61,8 +61,8 @@ class Messages extends ArpaElement {
      */
     onResourceAddMessage(message) {
         const prependNewMessages = this.hasProperty('prepend-new-messages');
-        let { type = 'arpa' } = message;
-        if (!this.getMessageTypes().includes(type)) {
+        let { type } = message;
+        if (!type || !this.getMessageTypes().includes(type)) {
             type = 'arpa';
         }
         /** @type {Message | null} */

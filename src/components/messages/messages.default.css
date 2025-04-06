@@ -1,8 +1,10 @@
 arpa-messages {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     width: 100%;
+    .message:not(:only-child) {
+        margin-bottom: .5rem;
+    }
 }
 
 arpa-messages:empty {

@@ -22,10 +22,10 @@ const MessagesStory = {
         return html`
             <arpa-messages id="messages" ${attrString(args)}>
                 <arpa-message text="This is a test message" can-close truncate-content="30"></arpa-message>
-                <info-message text="This is an info message"></info-message>
-                <success-message text="This is a success message"></success-message>
-                <warning-message text="This is a warning message"></warning-message>
-                <error-message text="This is an error message"></error-message>
+                <info-message text="This is an info message" can-close></info-message>
+                <success-message text="This is a success message" can-close></success-message>
+                <warning-message text="This is a warning message" can-close></warning-message>
+                <error-message text="This is an error message" can-close></error-message>
             </arpa-messages>
         `;
     }
@@ -88,6 +88,22 @@ export const Test = {
             resource.deleteMessage(newMessage);
             await waitFor(() => {
                 expect(canvas.queryByText(newMessageText)).toBeNull();
+            });
+        });
+
+        await step('Deletes last message by clicking the close button', async () => {
+            const lastMessage = messagesNode.children[messagesNode.children.length - 1];
+            const closeButton = await waitFor(() =>
+                within(lastMessage).getByRole('button', { name: 'Close' })
+            );
+            await waitFor(() => {
+                expect(closeButton).toBeTruthy();
+            });
+
+            closeButton.click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await waitFor(() => {
+                expect(canvas.queryByText('This is an error message')).toBeNull();
             });
         });
 

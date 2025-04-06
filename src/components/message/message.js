@@ -2,34 +2,40 @@
  * @typedef {import('./message.types').MessageConfigType} MessageConfigType
  * @typedef {import('@arpadroid/resources').MessageResource} MessageResource
  * @typedef {import('../messages/messages.js').default} MessagesComponent
+ * @typedef {import('@arpadroid/ui').TruncateText} TruncateText
  */
-import { defineCustomElement, mergeObjects, render } from '@arpadroid/tools';
+import { defineCustomElement, listen, mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
 const html = String.raw;
 class Message extends ListItem {
+    ///////////////////////////////
+    // #region Initialization
+    //////////////////////////////
+
     /** @type {MessageConfigType} */
     _config = this._config;
-    /////////////////////////
-    // #region INITIALIZATION
-    /////////////////////////
+
     /**
      * Returns the default config.
      * @returns {MessageConfigType}
      */
     getDefaultConfig() {
-        return mergeObjects(super.getDefaultConfig(), {
+        this.bind('_onTextClick', '_onClose');
+        /** @type {MessageConfigType} */
+        const config = {
             closeLabel: 'Close',
             canClose: false,
             icon: 'chat_bubble',
             timeout: 0,
             truncateContent: 190,
             listSelector: 'arpa-messages'
-        });
+        };
+
+        return mergeObjects(super.getDefaultConfig(), config);
     }
 
     initializeProperties() {
         super.initializeProperties();
-        this._onClose = this._onClose.bind(this);
         /** @type {MessagesComponent | null} */
         this.messagesComponent = this.closest('arpa-messages');
         /** @type {MessageResource} */
@@ -39,21 +45,9 @@ class Message extends ListItem {
 
     // #endregion
 
-    ////////////////////
-    // #region ACCESSORS
-    ////////////////////
-
-    canClose() {
-        return this.hasAttribute('can-close') || this._config.canClose;
-    }
-
-    close() {
-        if (this.resource) {
-            this.resource.deleteMessage(this._config);
-        } else {
-            this.remove();
-        }
-    }
+    //////////////////////////
+    // #region Get
+    /////////////////////////
 
     getTimeout() {
         return parseFloat(this.getProperty('timeout'));
@@ -68,11 +62,35 @@ class Message extends ListItem {
         return i18nKey ? html`<i18n-text key="${i18nKey}"></i18n-text>` : '';
     }
 
+    getTruncateTextNode() {
+        return /** @type {TruncateText | null} */ (
+            this.contentNode?.tagName === 'TRUNCATE-TEXT' ? this.contentNode : null
+        );
+    }
+
+    // #endregion Get
+
+    //////////////////////////
+    // #region Has
+    /////////////////////////
+
+    hasReadMoreButton() {
+        return this.getProperty('has-read-more-button');
+    }
+
+    hasTextToggle() {
+        return !this.hasReadMoreButton() && this.truncateComponent;
+    }
+
+    canClose() {
+        return this.hasAttribute('can-close') || this._config.canClose;
+    }
+
     // #endregion
 
-    ////////////////////
+    ////////////////////////////
     // #region RENDERING
-    ////////////////////
+    ////////////////////////////
 
     renderRhs() {
         return super.renderRhs(this.renderCloseButton());
@@ -93,23 +111,15 @@ class Message extends ListItem {
 
     // #endregion
 
-    /////////////////////
-    // #region LIFECYCLE
-    /////////////////////
+    /////////////////////////////
+    // #region Lifecycle
+    /////////////////////////////
 
     _onConnected() {
         this.classList.add('message');
         super._onConnected();
         this._initializeMessage();
         this.handleTimeout();
-    }
-
-    async _initializeNodes() {
-        super._initializeNodes();
-        this.closeButton = this.querySelector('.message__closeButton');
-        this.closeButton?.removeEventListener('click', this._onClose);
-        this.closeButton?.addEventListener('click', this._onClose);
-        return true;
     }
 
     _initializeMessage() {
@@ -127,19 +137,65 @@ class Message extends ListItem {
         }
     }
 
+    async _initializeNodes() {
+        await super._initializeNodes();
+        /** @type {TruncateText | null} */
+        this.truncateComponent = this.getTruncateTextNode();
+        /** @type {HTMLElement | null} */
+        this.closeButton = this.querySelector('.message__closeButton');
+        this.closeButton && listen(this.closeButton, 'click', this._onClose);
+        return true;
+    }
+
+    _onComplete() {
+        if (this.hasTextToggle()) {
+            this.mainNode?.setAttribute('role', 'button');
+            this.mainNode?.setAttribute('tabindex', '0');
+            this.mainNode?.setAttribute('aria-label', 'Read more');
+            this._config.action = this._onTextClick;
+        }
+        super._onComplete();
+    }
+
+    /**
+     * When the text is clicked, it will toggle the truncate state.
+     * @param {Event} event
+     */
+    _onTextClick(event) {
+        const target = /** @type {HTMLElement} */ (event.target);
+        const interactiveSelector = 'a, button, input, textarea, select';
+        if (target?.closest(interactiveSelector)) {
+            return;
+        }
+        this.truncateComponent?.toggleTruncate();
+    }
+
+    _onClose() {
+        const { onClose } = this._config;
+        typeof onClose === 'function' && onClose();
+        this.close();
+    }
+
     disconnectedCallback() {
         clearTimeout(this.timeout);
     }
 
-    // #endregion
+    // #endregion Lifecycle
 
-    _onClose() {
-        const { onClose } = this._config;
-        if (typeof onClose === 'function') {
-            onClose();
-        }
-        this.close();
+    //////////////////////////
+    // #region API
+    /////////////////////////
+
+    async close() {
+        this.style.height = this.clientHeight + 'px';
+        requestAnimationFrame(() => this.classList.add('message--closing'));
+        setTimeout(() => {
+            this.resource?.deleteMessage(this._config);
+            this.remove();
+        }, 700);
     }
+
+    // #endregion
 }
 
 defineCustomElement('arpa-message', Message);

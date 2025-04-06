@@ -7,8 +7,8 @@ export type MessageConfigType = ListItemConfigType & {
     canClose?: boolean;
     closeLabel?: string;
     icon?: string;
-    truncateContent?: boolean;
-    type?: 'info' | 'success' | 'warning' | 'error';
+    truncateContent?: number;
+    type?: 'info' | 'success' | 'warning' | 'error' | 'arpa';
     onClose?: () => void;
     node?: HTMLElement;
     resource?: MessageResource;
