@@ -155,6 +155,7 @@ class Message extends ListItem {
             this._config.action = this._onTextClick;
         }
         super._onComplete();
+        this.classList.add('message--open');
     }
 
     /**
@@ -187,12 +188,11 @@ class Message extends ListItem {
     /////////////////////////
 
     async close() {
-        this.style.height = this.clientHeight + 'px';
-        requestAnimationFrame(() => this.classList.add('message--closing'));
+        this.classList.add('message--closing');
         setTimeout(() => {
             this.resource?.deleteMessage(this._config);
             this.remove();
-        }, 700);
+        }, 800);
     }
 
     // #endregion

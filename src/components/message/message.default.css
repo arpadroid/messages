@@ -6,6 +6,14 @@
     --msg-color: var(--grey-600);
     --msg-border-color: var(--grey-400);
     --msg-weight: 600;
+    /* --msg-transition-out: transform 0.2s var(--easeInExpo), max-height 0.4s var(--easeOutExpo) 0.4s,
+        height 0.4s var(--easeOutExpo) 0.4s, padding-top 0.4s var(--easeOutExpo) 0.4s,
+        padding-bottom 0.4s var(--easeOutExpo) 0.4s, margin-top 0.4s var(--easeOutExpo) 0.4s,
+        margin-bottom 0.4s var(--easeOutExpo) 0.4s;
+
+    --msg-transition-in: opacity 0.5s var(--easeInQuad) 0.3s, margin 0.4s var(--easeOutExpo),
+        height 0.4s var(--easeOutSine), padding-top 0.4s var(--easeOutQuad),
+        padding-bottom 0.4s var(--easeOutQuad); */
 }
 
 .message.message {
@@ -18,20 +26,18 @@
     color: var(--msg-color);
     gap: 4px;
     padding: 0.75rem;
-
-    transition: var(--theme-transition);
-    transition: opacity 0.2s var(--easeInQuad), box-shadow 0.4s ease-out, transform 0.1s var(--easeInExpo),
-        height 0.4s var(--easeOutExpo) 0.4s, padding 0.4s var(--easeOutQuad) 0.4s,
-        margin 0.4s var(--easeOutExpo) 0.4s;
-
+    transition: all 0.6s var(--easeOutExpo);
     box-shadow: var(--box-shadow);
 
-    &.message--closing {
-        height: 0 !important;
-        padding: 0;
+    &.message--closing.message--closing {
+        overflow: hidden;
         opacity: 0;
-        margin: 0;
-        transform: translateX(200%);
+        transform: translateX(100%);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        max-height: 0;
+        padding-bottom: 0;
     }
 
     .listItem__content {
