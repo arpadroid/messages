@@ -3,6 +3,7 @@
  * @typedef {import('@arpadroid/resources').MessageResource} MessageResource
  * @typedef {import('../messages/messages.js').default} MessagesComponent
  * @typedef {import('@arpadroid/ui').TruncateText} TruncateText
+ * @typedef {import('@arpadroid/resources').MessageType} MessageType
  */
 import { defineCustomElement, listen, mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
@@ -123,7 +124,7 @@ class Message extends ListItem {
     }
 
     _initializeMessage() {
-        const message = this.resource?.registerMessage(this._config, this);
+        const message = this.resource?.registerMessage(/** @type {} */ (this._config), this);
         if (message) {
             this._config.id = message.id?.toString();
             this._config.node = message.node;
@@ -189,7 +190,7 @@ class Message extends ListItem {
 
     async close() {
         this.classList.add('message--closing');
-        setTimeout(() => {
+        setTimeout(() => { // @ts-ignore
             this.resource?.deleteMessage(this._config);
             this.remove();
         }, 800);

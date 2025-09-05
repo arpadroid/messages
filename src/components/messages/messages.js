@@ -85,7 +85,7 @@ class Messages extends ArpaElement {
 
     /**
      * Adds a message to the messenger.
-     * @param {MessageConfigType} message
+     * @param {MessageType} message
      * @returns {MessageType | undefined}
      */
     addMessage(message) {
@@ -94,7 +94,7 @@ class Messages extends ArpaElement {
 
     /**
      * Adds messages to the messenger.
-     * @param {MessageConfigType[]} messages
+     * @param {MessageType[]} messages
      * @returns {Messages}
      */
     addMessages(messages) {
@@ -104,7 +104,7 @@ class Messages extends ArpaElement {
 
     /**
      * Deletes a message from the messenger.
-     * @param {MessageConfigType} message
+     * @param {MessageType} message
      * @returns {Messages}
      */
     deleteMessage(message) {
