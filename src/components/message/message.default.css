@@ -110,12 +110,11 @@ warning-message.message {
     --msg-icon-color: var(--orange);
 }
 
-button.message__closeButton {
+.message__closeButton {
+    --icon-button-size: 2rem;
     margin-left: auto;
     background-color: transparent;
-    border: none !important;
     align-self: flex-start;
-    padding: 8px;
 }
 
 button.message__closeButton:hover,

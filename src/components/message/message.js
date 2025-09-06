@@ -102,7 +102,7 @@ class Message extends ListItem {
         return render(
             this.canClose(),
             html`<icon-button
-                class="message__closeButton"
+                class="message__closeButton iconButton--mini"
                 icon="close"
                 variant="minimal"
                 label="${label}"
@@ -124,7 +124,7 @@ class Message extends ListItem {
     }
 
     _initializeMessage() {
-        const message = this.resource?.registerMessage(/** @type {} */ (this._config), this);
+        const message = this.resource?.registerMessage(/** @type {MessageType} */ (this._config), this);
         if (message) {
             this._config.id = message.id?.toString();
             this._config.node = message.node;
@@ -190,7 +190,8 @@ class Message extends ListItem {
 
     async close() {
         this.classList.add('message--closing');
-        setTimeout(() => { // @ts-ignore
+        setTimeout(() => {
+            // @ts-ignore
             this.resource?.deleteMessage(this._config);
             this.remove();
         }, 800);
