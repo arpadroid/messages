@@ -1,9 +1,7 @@
 /**
  * @typedef {import('./message.types').MessageConfigType} MessageConfigType
- * @typedef {import('@arpadroid/resources').MessageResource} MessageResource
  * @typedef {import('../messages/messages.js').default} MessagesComponent
  * @typedef {import('@arpadroid/ui').TruncateText} TruncateText
- * @typedef {import('@arpadroid/resources').MessageType} MessageType
  */
 import { defineCustomElement, listen, mergeObjects, render } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
@@ -25,6 +23,7 @@ class Message extends ListItem {
         /** @type {MessageConfigType} */
         const config = {
             closeLabel: 'Close',
+            classNames: ['message'],
             canClose: false,
             icon: 'chat_bubble',
             timeout: 0,
@@ -33,15 +32,6 @@ class Message extends ListItem {
         };
 
         return mergeObjects(super.getDefaultConfig(), config);
-    }
-
-    initializeProperties() {
-        super.initializeProperties();
-        /** @type {MessagesComponent | null} */
-        this.messagesComponent = this.closest('arpa-messages');
-        /** @type {MessageResource} */
-        this.resource = this._config.resource ?? this.messagesComponent?.resource;
-        return true;
     }
 
     // #endregion
@@ -117,18 +107,8 @@ class Message extends ListItem {
     /////////////////////////////
 
     _onConnected() {
-        this.classList.add('message');
         super._onConnected();
-        this._initializeMessage();
         this.handleTimeout();
-    }
-
-    _initializeMessage() {
-        const message = this.resource?.registerMessage(/** @type {MessageType} */ (this._config), this);
-        if (message) {
-            this._config.id = message.id?.toString();
-            this._config.node = message.node;
-        }
     }
 
     handleTimeout() {

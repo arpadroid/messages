@@ -2,17 +2,14 @@
  * @typedef {import('./messages.types').MessagesConfigType} MessagesConfigType
  * @typedef {import('../message/message.types').MessageConfigType} MessageConfigType
  * @typedef {import('../message/message.js').default} Message
- * @typedef {import('@arpadroid/resources').MessageType} MessageType
+ * @typedef {import('@arpadroid/resources').ListResourceItemType} MessageType
+ * @typedef {import('@arpadroid/tools').AbstractContentInterface} AbstractContentInterface
  */
-import { defineCustomElement, mergeObjects } from '@arpadroid/tools';
-import { MessageResource } from '@arpadroid/resources';
-import { ArpaElement } from '@arpadroid/ui';
+import { attrString, defineCustomElement, mergeObjects, renderNode } from '@arpadroid/tools';
+import { List } from '@arpadroid/lists';
 
-class Messages extends ArpaElement {
-    messagesById = {};
-    messagesByText = {};
-    messagesByType = {};
-
+const html = String.raw;
+class Messages extends List {
     //////////////////////////
     // #region INITIALIZATION
     /////////////////////////
@@ -21,57 +18,14 @@ class Messages extends ArpaElement {
      * @returns {MessagesConfigType}
      */
     getDefaultConfig() {
-        return mergeObjects(super.getDefaultConfig(), {
-            messages: [],
-            resourceConfig: {},
+        /** @type {MessagesConfigType} */
+        const config = {
+            className: 'arpaMessages',
+            renderMode: 'minimal',
+            hasResource: true,
             prependNewMessages: true
-        });
-    }
-
-    _initialize() {
-        this.bind('onResourceAddMessage');
-        const id = this.getProperty('id');
-        if (!id) {
-            throw new Error('Messages must have an id.');
-        }
-        this._initializeResource();
-    }
-
-    _initializeResource() {
-        if (!this.resource) {
-            const id = this.getProperty('id');
-            /** @type { MessageResource } */
-            this.resource = new MessageResource({ id });
-            this.resource.on('delete_message', (/** @type {MessageConfigType} */ message) =>
-                message?.node?.remove()
-            );
-            this.resource.on('delete_messages', () => (this.innerHTML = ''));
-            this.resource.on('add_message', this.onResourceAddMessage);
-        }
-    }
-
-    // #endregion
-
-    ///////////////////////////
-    // #region RESOURCE EVENTS
-    //////////////////////////
-    /**
-     * Handles the add_message event from the resource.
-     * @param {MessageConfigType} message
-     */
-    onResourceAddMessage(message) {
-        const prependNewMessages = this.hasProperty('prepend-new-messages');
-        let { type } = message;
-        if (!type || !this.getMessageTypes().includes(type)) {
-            type = 'arpa';
-        }
-        /** @type {Message | null} */
-        const node = /** @type {Message | null} */ (document.createElement(`${type}-message`));
-        if (node) {
-            message.node = node;
-            node.setConfig(message);
-            prependNewMessages ? this.prepend(node) : this.appendChild(node);
-        }
+        };
+        return mergeObjects(super.getDefaultConfig(), config);
     }
     // #endregion
 
@@ -86,10 +40,11 @@ class Messages extends ArpaElement {
     /**
      * Adds a message to the messenger.
      * @param {MessageType} message
+     * @param {boolean} prepend
      * @returns {MessageType | undefined}
      */
-    addMessage(message) {
-        return this.resource?.addMessage(message);
+    addMessage(message, prepend = this.getProperty('prependNewMessages') ?? true) {
+        return this.listResource?.addItem(message, true, prepend);
     }
 
     /**
@@ -98,7 +53,7 @@ class Messages extends ArpaElement {
      * @returns {Messages}
      */
     addMessages(messages) {
-        this.resource?.addMessages(messages);
+        this.listResource?.addItems(messages);
         return this;
     }
 
@@ -108,12 +63,84 @@ class Messages extends ArpaElement {
      * @returns {Messages}
      */
     deleteMessage(message) {
-        this.resource?.deleteMessage(message);
+        this.listResource?.removeItem(message);
         return this;
     }
 
     deleteMessages() {
-        return this.resource?.deleteMessages();
+        return this.listResource?.removeItems();
+    }
+
+    // #endregion
+
+    ////////////////////////////
+    // #region MESSAGE TYPES
+    ///////////////////////////
+    /**
+     * Adds an info message.
+     * @param {AbstractContentInterface} message
+     * @param {MessageType} config
+     * @returns {MessageType | undefined}
+     */
+    info(message, config = {}) {
+        config.content = message;
+        config.type = 'info';
+        return this.addMessage(config);
+    }
+
+    /**
+     * Adds an error message.
+     * @param {AbstractContentInterface} message
+     * @param {MessageType} config
+     * @returns {MessageType | undefined}
+     */
+    error(message, config = {}) {
+        config.content = message;
+        config.type = 'error';
+        return this.addMessage(config);
+    }
+
+    /**
+     * Adds an warning message.
+     * @param {AbstractContentInterface} message
+     * @param {MessageType} config
+     * @returns {MessageType | undefined}
+     */
+    warning(message, config = {}) {
+        config.content = message;
+        config.type = 'warning';
+        return this.addMessage(config);
+    }
+
+    /**
+     * Adds an success message.
+     * @param {AbstractContentInterface} message
+     * @param {MessageType} config
+     * @returns {MessageType | undefined}
+     */
+    success(message, config = {}) {
+        config.content = message;
+        config.type = 'success';
+        return this.addMessage(config);
+    }
+
+    /**
+     * Creates a list item via class instantiation.
+     * @param {MessageConfigType} config
+     * @param {Record<string,unknown>} payload
+     * @param {Record<string,unknown>} mapping
+     * @returns {Message | HTMLElement}
+     * @throws {Error} If the list item component is not defined.
+     */
+    createItem(config = {}, payload = this.getDefaultItemPayload(config.id || ''), mapping = {}) {
+        if (payload.node instanceof HTMLElement) return payload.node;
+        const { type = 'info', content = '' } = config;
+        const messageHTML = html`<${type}-message ${attrString(config)}>${content}</${type}-message>`;
+        const item = /** @type {Message} */ (renderNode(messageHTML));
+        payload && (item.payload = payload);
+        mapping && (item.map = mapping);
+        this.listResource && this.preProcessNode(item);
+        return item;
     }
 
     // #endregion

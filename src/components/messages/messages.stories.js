@@ -1,3 +1,6 @@
+/**
+ * @typedef {import('./messages').default} MessagesComponent
+ */
 import { attrString } from '@arpadroid/tools';
 import { waitFor, expect, within } from '@storybook/test';
 const html = String.raw;
@@ -56,13 +59,15 @@ export const Test = {
     playSetup: async canvasElement => {
         const canvas = within(canvasElement);
         await customElements.whenDefined('arpa-messages');
-        const messagesNode = canvasElement.querySelector('arpa-messages');
-        return { canvas, messagesNode };
+        /** @type {MessagesComponent} */
+        const messages = canvasElement.querySelector('arpa-messages');
+        await messages?.promise;
+        return { canvas, messages };
     },
     play: async ({ canvasElement, step }) => {
         const setup = await Test.playSetup(canvasElement);
-        const { canvas, messagesNode } = setup;
-        const resource = messagesNode.resource;
+        const { canvas, messages } = setup;
+
         await step('Renders the messages', async () => {
             await waitFor(() => {
                 expect(canvas.getByText('This is a test message')).toBeTruthy();
@@ -75,24 +80,24 @@ export const Test = {
         const newMessageText = 'This is a new message';
         let newMessage;
         await step('Adds a new message', async () => {
-            newMessage = resource.addMessage({ text: newMessageText });
+            newMessage = messages.addMessage({ content: newMessageText });
             await waitFor(() => {
                 const newMessage = canvas.getByText(newMessageText);
                 expect(newMessage).toBeTruthy();
                 const messageWrapper = newMessage.closest('info-message');
-                expect(messagesNode.children[0]).toBe(messageWrapper);
+                expect(messages.children[0]).toBe(messageWrapper);
             });
         });
 
         await step('Deletes the new message', async () => {
-            resource.deleteMessage(newMessage);
+            messages.deleteMessage(newMessage);
             await waitFor(() => {
                 expect(canvas.queryByText(newMessageText)).toBeNull();
             });
         });
 
         await step('Deletes last message by clicking the close button', async () => {
-            const lastMessage = messagesNode.children[messagesNode.children.length - 1];
+            const lastMessage = messages.children[messages.children.length - 1];
             const closeButton = await waitFor(() =>
                 within(lastMessage).getByRole('button', { name: 'Close' })
             );
@@ -101,24 +106,21 @@ export const Test = {
             });
 
             closeButton.click();
-            await new Promise(resolve => setTimeout(resolve, 500));
+
             await waitFor(() => {
                 expect(canvas.queryByText('This is an error message')).toBeNull();
             });
         });
 
         await step('Deletes all messages', async () => {
-            resource.deleteMessages();
+            messages.deleteMessages();
             await waitFor(() => {
-                expect(messagesNode.children.length).toBe(0);
+                expect(messages.children.length).toBe(0);
             });
         });
 
         await step('adds multiple messages', async () => {
-            resource.addMessages([
-                { text: 'This is another new message', type: null },
-                { text: newMessageText }
-            ]);
+            messages.addMessages([{ text: 'This is another new message' }, { text: newMessageText }]);
             await waitFor(() => {
                 expect(canvas.getByText('This is a new message')).toBeTruthy();
                 expect(canvas.getByText('This is another new message')).toBeTruthy();
