@@ -121,6 +121,7 @@ export const Test = {
         await step('Renders the message', () => {
             expect(ReadMoreButton).toBeInTheDocument();
             expect(canvas.getByText('This is a test message')).toBeTruthy();
+            expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
         });
         let deleteButton;
         await step('Renders the close button', async () => {
