@@ -126,16 +126,20 @@ class Messages extends List {
 
     /**
      * Creates a list item via class instantiation.
-     * @param {MessageConfigType} config
+     * @param {MessageConfigType} _config
      * @param {Record<string,unknown>} payload
      * @param {Record<string,unknown>} mapping
      * @returns {Message | HTMLElement}
      * @throws {Error} If the list item component is not defined.
      */
-    createItem(config = {}, payload = this.getDefaultItemPayload(config.id || ''), mapping = {}) {
+    createItem(_config = {}, payload = this.getDefaultItemPayload(_config.id || ''), mapping = {}) {
         if (payload.node instanceof HTMLElement) return payload.node;
+        const config = { ..._config };
         const { type = 'info', content = '' } = config;
-        const messageHTML = html`<${type}-message ${attrString(config)}>${content}</${type}-message>`;
+        delete config.type;
+        delete config.content;
+        const attrStr = attrString(config);
+        const messageHTML = html`<${type}-message ${attrStr}>${content}</${type}-message>`;
         const item = /** @type {Message} */ (renderNode(messageHTML));
         payload && (item.payload = payload);
         mapping && (item.map = mapping);
