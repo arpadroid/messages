@@ -6,10 +6,10 @@
     "types": "./dist/@types/types.compiled.d.ts",
     "type": "module",
     "scripts": {
-        "build": "node ./node_modules/@arpadroid/module/scripts/build-project.mjs --project=messages --minify",
+        "build": "arpadroid-build --minify",
         "prepublish": "npm run build",
-        "storybook": "npm run build -- --storybook=6003 --watch",
-        "test": "node ./node_modules/@arpadroid/module/scripts/test-project.mjs --project=messages --storybook --jest --port=6003"
+        "dev": "arpadroid-build --storybook=6003 --watch",
+        "test": "arpadroid-test --storybook --jest --port=6003"
     },
     "repository": {
         "type": "git",
@@ -29,17 +29,11 @@
     "homepage": "https://github.com/arpadroid/messages#readme",
     "devDependencies": {
         "@babel/core": "^7.23.9",
-        "@babel/plugin-syntax-import-assertions": "^7.23.3",
-        "@babel/preset-env": "^7.23.9",
-        "babel-jest": "^29.7.0",
-        "babel-loader": "^9.1.3",
-        "dts-bundle-generator": "^9.3.1",
-        "jsdoc-to-markdown": "^8.0.1",
-        "typescript": "^5.4.2"
+        "@babel/preset-env": "^7.23.9"
     },
     "peerDependencies": {
         "@arpadroid/module": "../module",
-        "@arpadroid/stylesheet-bundler": "file:../stylesheet-bundler",
+        "@arpadroid/style-bun": "file:../style-bun",
         "@arpadroid/i18n": "file:../i18n",
         "@arpadroid/lists": "file:../lists",
         "@arpadroid/resources": "file:../resources",
