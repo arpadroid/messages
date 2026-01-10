@@ -9,7 +9,8 @@
         "build": "arpadroid-build --minify",
         "prepublish": "npm run build",
         "dev": "arpadroid-build --storybook=6003 --watch",
-        "test": "arpadroid-test --storybook --jest --port=6003"
+        "test": "arpadroid-test --storybook --jest --port=6003",
+        "test:ci": "npm run test -- --ci"
     },
     "repository": {
         "type": "git",
@@ -33,7 +34,6 @@
     },
     "peerDependencies": {
         "@arpadroid/module": "../module",
-        "@arpadroid/style-bun": "file:../style-bun",
         "@arpadroid/i18n": "file:../i18n",
         "@arpadroid/lists": "file:../lists",
         "@arpadroid/resources": "file:../resources",
