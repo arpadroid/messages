@@ -1,3 +1,4 @@
+/** @type {import('@arpadroid/module').BuildConfigType} */
 const config = {
     buildTypes: true,
     buildType: 'uiComponent',
