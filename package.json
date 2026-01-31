@@ -34,10 +34,11 @@
         "@babel/preset-env": "^7.28.6"
     },
     "peerDependencies": {
-        "@arpadroid/module": "../module",
         "@arpadroid/i18n": "file:../i18n",
         "@arpadroid/lists": "file:../lists",
+        "@arpadroid/module": "../module",
         "@arpadroid/resources": "file:../resources",
-        "@arpadroid/tools": "file:../tools"
+        "@arpadroid/tools": "file:../tools",
+        "@arpadroid/ui": "file:../ui"
     }
 }
