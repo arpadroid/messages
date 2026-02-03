@@ -1,9 +1,17 @@
 /**
  * @typedef {import('./messages').default} MessagesComponent
+ * @typedef {import('@storybook/web-components-vite').Meta} Meta
+ * @typedef {import('@storybook/web-components-vite').StoryObj} StoryObj
+ * @typedef {import('@storybook/web-components-vite').StoryContext} StoryContext
+ * @typedef {import('@storybook/web-components-vite').Args} Args
  */
+
+import { expect, waitFor, within } from 'storybook/test';
 import { attrString } from '@arpadroid/tools';
-import { waitFor, expect, within } from '@storybook/test';
+
 const html = String.raw;
+
+/** @type {Meta} */
 const MessagesStory = {
     title: 'Messages/Messages',
     tags: [],
@@ -20,7 +28,7 @@ const MessagesStory = {
             prependNewMessages: { control: { type: 'boolean' }, table: { category } }
         };
     },
-    render: args => {
+    render: (/** @type {Args} */ args) => {
         delete args.text;
         return html`
             <arpa-messages id="messages" ${attrString(args)}>
@@ -34,16 +42,15 @@ const MessagesStory = {
     }
 };
 
+/** @type {StoryObj} */
 export const Default = {
     name: 'Render',
     parameters: {},
     argTypes: MessagesStory.getArgTypes(),
     args: { ...MessagesStory.getArgs() }
 };
-
+/** @type {StoryObj} */
 export const Test = {
-    args: Default.args,
-    parameters: {},
     args: {
         ...Default.args,
         canClose: true,
@@ -56,15 +63,15 @@ export const Test = {
         usage: { disable: true },
         options: { selectedPanel: 'storybook/interactions/panel' }
     },
-    playSetup: async canvasElement => {
+    playSetup: async (/** @type {HTMLElement} */ canvasElement) => {
         const canvas = within(canvasElement);
         await customElements.whenDefined('arpa-messages');
-        /** @type {MessagesComponent} */
+        /** @type {MessagesComponent | null} */
         const messages = canvasElement.querySelector('arpa-messages');
         await messages?.promise;
         return { canvas, messages };
     },
-    play: async ({ canvasElement, step }) => {
+    play: async (/** @type {StoryContext} */ { canvasElement, step }) => {
         const setup = await Test.playSetup(canvasElement);
         const { canvas, messages } = setup;
 
@@ -78,6 +85,7 @@ export const Test = {
             });
         });
         const newMessageText = 'This is a new message';
+        /** @type {HTMLElement | null} */
         let newMessage;
         await step('Adds a new message', async () => {
             newMessage = messages.addMessage({ content: newMessageText });
@@ -130,3 +138,4 @@ export const Test = {
 };
 
 export default MessagesStory;
+/** @type {Meta} */

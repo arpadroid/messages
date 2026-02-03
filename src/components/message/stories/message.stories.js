@@ -1,4 +1,13 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+/**
+ * @typedef {import('@storybook/web-components-vite').Meta} Meta
+ * @typedef {import('@storybook/web-components-vite').StoryObj} StoryObj
+ * @typedef {import('@storybook/web-components-vite').StoryContext} StoryContext
+ * @typedef {import('@storybook/web-components-vite').Args} Args
+ */
+
+import { expect, fireEvent, waitFor, within } from 'storybook/test';
+import { attrString } from '@arpadroid/tools';
 import {
     AmazingComputingFacts,
     ApolloMission,
@@ -6,9 +15,10 @@ import {
     SoftwareEngineer,
     VideoGameHistory
 } from './templates.js';
-import { attrString } from '@arpadroid/tools';
-import { waitFor, expect, fireEvent, within } from '@storybook/test';
+
 const html = String.raw;
+
+/** @type {Meta} */
 const MessageStory = {
     title: 'Messages/Message',
     tags: [],
@@ -37,6 +47,11 @@ const MessageStory = {
             truncateContent: { control: { type: 'number' }, table: { category } }
         };
     },
+    /**
+     * @param {Args} args
+     * @param {StoryContext} story
+     * @param {string} [messageTag]
+     */
     render: (args, story, messageTag = 'arpa-message') => {
         const text = args.text;
         delete args.text;
@@ -44,6 +59,7 @@ const MessageStory = {
     }
 };
 
+/** @type {StoryObj} */
 export const Default = {
     name: 'Plain Message',
     parameters: {},
@@ -55,14 +71,18 @@ export const Default = {
     }
 };
 
+/** @type {StoryObj} */
 export const InfoMessage = {
     argTypes: MessageStory.getArgTypes(),
     args: {
         ...MessageStory.getArgs(),
         text: AmazingComputingFacts
     },
-    render: (args, story) => MessageStory.render(args, story, 'info-message')
+
+    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
+        MessageStory.render(args, story, 'info-message')
 };
+/** @type {StoryObj} */
 
 export const SuccessMessage = {
     argTypes: MessageStory.getArgTypes(),
@@ -70,7 +90,8 @@ export const SuccessMessage = {
         ...MessageStory.getArgs(),
         text: ApolloMission
     },
-    render: (args, story) => MessageStory.render(args, story, 'success-message')
+    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
+        MessageStory.render(args, story, 'success-message')
 };
 
 export const WarningMessage = {
@@ -79,21 +100,23 @@ export const WarningMessage = {
         ...MessageStory.getArgs(),
         text: VideoGameHistory
     },
-    render: (args, story) => MessageStory.render(args, story, 'warning-message')
+    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
+        MessageStory.render(args, story, 'warning-message')
 };
 
+/** @type {StoryObj} */
 export const ErrorMessage = {
     argTypes: MessageStory.getArgTypes(),
     args: {
         ...MessageStory.getArgs(),
         text: SoftwareEngineer
     },
-    render: (args, story) => MessageStory.render(args, story, 'error-message')
+    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
+        MessageStory.render(args, story, 'error-message')
 };
 
+/** @type {StoryObj} */
 export const Test = {
-    args: Default.args,
-    parameters: {},
     args: {
         ...Default.args,
         text: 'This is a test message',
@@ -105,14 +128,15 @@ export const Test = {
         usage: { disable: true },
         options: { selectedPanel: 'storybook/interactions/panel' }
     },
-    playSetup: async canvasElement => {
+    playSetup: async (/** @type {HTMLElement} */ canvasElement) => {
         const canvas = within(canvasElement);
         await customElements.whenDefined('arpa-message');
+        /** @type {import('../message.js').default | null} */
         const messageNode = canvasElement.querySelector('arpa-message');
-        await messageNode.load;
+        await messageNode?.promise;
         return { canvas, messageNode };
     },
-    play: async ({ canvasElement, step }) => {
+    play: async (/** @type {StoryContext} */ { canvasElement, step }) => {
         const setup = await Test.playSetup(canvasElement);
         const { canvas, messageNode } = setup;
 
@@ -123,6 +147,7 @@ export const Test = {
             expect(canvas.getByText('This is a test message')).toBeTruthy();
             expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
         });
+        /** @type {HTMLButtonElement | null} */
         let deleteButton;
         await step('Renders the close button', async () => {
             await waitFor(() => {
@@ -163,7 +188,7 @@ export const Test = {
 
         await step('Clicks on close button and checks that message is removed', async () => {
             expect(canvas.getByText(truncatedMessage)).toBeTruthy();
-            fireEvent.click(deleteButton);
+            deleteButton && fireEvent.click(deleteButton);
             await new Promise(resolve => setTimeout(resolve, 500));
             await waitFor(() => {
                 expect(canvas.queryByText(truncatedMessage)).toBeFalsy();
@@ -172,4 +197,5 @@ export const Test = {
     }
 };
 
+/** @type {Meta} */
 export default MessageStory;
