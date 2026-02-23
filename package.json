@@ -2,14 +2,22 @@
     "name": "@arpadroid/messages",
     "version": "1.0.0",
     "description": "A library of web components for showing user messages and notifications.",
-    "exports": "./dist/arpadroid-messages.js",
+    "exports": {
+        ".": {
+            "types": "./dist/@types/types.compiled.d.ts",
+            "import": "./dist/arpadroid-messages.js"
+        }
+    },
     "types": "./dist/@types/types.compiled.d.ts",
     "type": "module",
     "scripts": {
         "build": "arpadroid-build --minify",
         "clean": "arpadroid-clean",
         "dev": "arpadroid-build --storybook --watch",
-        "test": "arpadroid-test --storybook --jest"
+        "test": "arpadroid-test --storybook --jest",
+        "t": "npm run test -- --slim",
+        "check:types": "arpadroid-check-types",
+        "initialize": "arpadroid-initialize"
     },
     "repository": {
         "type": "git",
