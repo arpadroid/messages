@@ -1,5 +1,5 @@
 import { ListItemConfigType } from '@arpadroid/lists';
-import { MessageResource } from '@arpadroid/resources';
+import { ListResource } from '@arpadroid/resources';
 
 export type MessageConfigType = ListItemConfigType & {
     text?: string;
@@ -11,5 +11,5 @@ export type MessageConfigType = ListItemConfigType & {
     type?: 'info' | 'success' | 'warning' | 'error' | 'arpa';
     onClose?: () => void;
     node?: HTMLElement;
-    resource?: MessageResource;
+    resource?: ListResource;
 };
