@@ -6,17 +6,9 @@
  * @typedef {import('@storybook/web-components-vite').Args} Args
  */
 
-import { expect, fireEvent, waitFor, within } from 'storybook/test';
-import { attrString } from '@arpadroid/tools';
-import {
-    AmazingComputingFacts,
-    ApolloMission,
-    HistoryOfComputing,
-    SoftwareEngineer,
-    VideoGameHistory
-} from './templates.js';
-
-const html = String.raw;
+import { expect, fireEvent, waitFor } from 'storybook/test';
+import { AmazingComputingFacts, ApolloMission, SoftwareEngineer, VideoGameHistory } from './templates.js';
+import { getArgs, getArgTypes, playSetup, renderMessage } from './message.stories.util.js';
 
 /** @type {Meta} */
 const MessageStory = {
@@ -25,47 +17,16 @@ const MessageStory = {
     parameters: {
         layout: 'padded'
     },
-    getArgs: () => {
-        return {
-            canClose: false,
-            closeLabel: undefined,
-            timeout: 0,
-            text: HistoryOfComputing,
-            truncateContent: 190
-        };
-    },
-    getArgTypes: (category = 'Message Props') => {
-        return {
-            text: {
-                control: { type: 'text' },
-                table: { category }
-            },
-            canClose: { control: { type: 'boolean' }, table: { category } },
-            closeLabel: { control: { type: 'text' }, table: { category } },
-            icon: { control: { type: 'text' }, table: { category } },
-            timeout: { control: { type: 'number' }, table: { category } },
-            truncateContent: { control: { type: 'number' }, table: { category } }
-        };
-    },
-    /**
-     * @param {Args} args
-     * @param {StoryContext} story
-     * @param {string} [messageTag]
-     */
-    render: (args, story, messageTag = 'arpa-message') => {
-        const text = args.text;
-        delete args.text;
-        return html`<${messageTag} ${attrString(args)}>${text}</${messageTag}>`;
-    }
+    render: (args, story) => renderMessage(args, story, 'info-message')
 };
 
 /** @type {StoryObj} */
 export const Default = {
     name: 'Plain Message',
     parameters: {},
-    argTypes: MessageStory.getArgTypes(),
+    argTypes: getArgTypes(),
     args: {
-        ...MessageStory.getArgs(),
+        ...getArgs(),
         icon: 'chat_bubble',
         closeLabel: 'Delete test message'
     }
@@ -73,46 +34,43 @@ export const Default = {
 
 /** @type {StoryObj} */
 export const InfoMessage = {
-    argTypes: MessageStory.getArgTypes(),
+    argTypes: getArgTypes(),
     args: {
-        ...MessageStory.getArgs(),
+        ...getArgs(),
         text: AmazingComputingFacts
     },
 
-    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
-        MessageStory.render(args, story, 'info-message')
+    render: (args, story) => renderMessage(args, story, 'info-message')
 };
-/** @type {StoryObj} */
 
+/** @type {StoryObj} */
 export const SuccessMessage = {
-    argTypes: MessageStory.getArgTypes(),
+    argTypes: getArgTypes(),
     args: {
-        ...MessageStory.getArgs(),
+        ...getArgs(),
         text: ApolloMission
     },
-    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
-        MessageStory.render(args, story, 'success-message')
+    render: (args, story) => renderMessage(args, story, 'success-message')
 };
 
+/** @type {StoryObj} */
 export const WarningMessage = {
-    argTypes: MessageStory.getArgTypes(),
+    argTypes: getArgTypes(),
     args: {
-        ...MessageStory.getArgs(),
+        ...getArgs(),
         text: VideoGameHistory
     },
-    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
-        MessageStory.render(args, story, 'warning-message')
+    render: (args, story) => renderMessage(args, story, 'warning-message')
 };
 
 /** @type {StoryObj} */
 export const ErrorMessage = {
-    argTypes: MessageStory.getArgTypes(),
+    argTypes: getArgTypes(),
     args: {
-        ...MessageStory.getArgs(),
+        ...getArgs(),
         text: SoftwareEngineer
     },
-    render: (/** @type {Args} */ args, /** @type {StoryContext} */ story) =>
-        MessageStory.render(args, story, 'error-message')
+    render: (args, story) => renderMessage(args, story, 'error-message')
 };
 
 /** @type {StoryObj} */
@@ -128,16 +86,10 @@ export const Test = {
         usage: { disable: true },
         options: { selectedPanel: 'storybook/interactions/panel' }
     },
-    playSetup: async (/** @type {HTMLElement} */ canvasElement) => {
-        const canvas = within(canvasElement);
-        await customElements.whenDefined('arpa-message');
-        /** @type {import('../message.js').default | null} */
-        const messageNode = canvasElement.querySelector('arpa-message');
-        await messageNode?.promise;
-        return { canvas, messageNode };
-    },
+    render: (args, story) => renderMessage(args, story, 'info-message'),
+
     play: async (/** @type {StoryContext} */ { canvasElement, step }) => {
-        const setup = await Test.playSetup(canvasElement);
+        const setup = await playSetup(canvasElement, 'info-message');
         const { canvas, messageNode } = setup;
 
         const ReadMoreButton = canvas.getByRole('button', { name: 'Read more' });
@@ -161,7 +113,7 @@ export const Test = {
         await step(
             'Sets a message to something longer than the truncateContent value abd checks that it is truncated',
             async () => {
-                messageNode.setContent(longMessage);
+                messageNode?.setContent(longMessage);
                 await waitFor(() => {
                     const truncatedText = longMessage.slice(0, 30).trim();
                     expect(canvas.getByText('...')).toBeTruthy();
