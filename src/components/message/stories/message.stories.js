@@ -1,79 +1,73 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 /**
- * @typedef {import('@storybook/web-components-vite').Meta} Meta
  * @typedef {import('@storybook/web-components-vite').StoryObj} StoryObj
  * @typedef {import('@storybook/web-components-vite').StoryContext} StoryContext
+ * @typedef {import('../message.types.js').MessageConfigType} MessageConfigType
+ * @typedef {import('@storybook/web-components-vite').Meta<MessageConfigType>} MetaType
+ * @typedef {import('@storybook/web-components-vite').StoryObj<MessageConfigType>} StoryType
  * @typedef {import('@storybook/web-components-vite').Args} Args
  */
 
 import { expect, fireEvent, waitFor } from 'storybook/test';
 import { AmazingComputingFacts, ApolloMission, SoftwareEngineer, VideoGameHistory } from './templates.js';
-import { getArgs, getArgTypes, playSetup, renderMessage } from './message.stories.util.js';
+import { getArgs, playSetup, renderMessage } from './message.stories.util.js';
 
-/** @type {Meta} */
+/** @type {MetaType} */
 const MessageStory = {
     title: 'Messages/Message',
+    component: 'arpa-message',
     tags: [],
+    args: getArgs(),
     parameters: {
         layout: 'padded'
     },
     render: (args, story) => renderMessage(args, story, 'info-message')
 };
 
-/** @type {StoryObj} */
+/** @type {StoryType} */
 export const Default = {
     name: 'Plain Message',
     parameters: {},
-    argTypes: getArgTypes(),
     args: {
-        ...getArgs(),
         icon: 'chat_bubble',
         closeLabel: 'Delete test message'
     }
 };
 
-/** @type {StoryObj} */
+/** @type {StoryType} */
 export const InfoMessage = {
-    argTypes: getArgTypes(),
     args: {
-        ...getArgs(),
         text: AmazingComputingFacts
     },
 
     render: (args, story) => renderMessage(args, story, 'info-message')
 };
 
-/** @type {StoryObj} */
+/** @type {StoryType} */
 export const SuccessMessage = {
-    argTypes: getArgTypes(),
     args: {
-        ...getArgs(),
         text: ApolloMission
     },
     render: (args, story) => renderMessage(args, story, 'success-message')
 };
 
-/** @type {StoryObj} */
+/** @type {StoryType} */
 export const WarningMessage = {
-    argTypes: getArgTypes(),
     args: {
-        ...getArgs(),
         text: VideoGameHistory
     },
     render: (args, story) => renderMessage(args, story, 'warning-message')
 };
 
-/** @type {StoryObj} */
+/** @type {StoryType} */
 export const ErrorMessage = {
-    argTypes: getArgTypes(),
     args: {
-        ...getArgs(),
         text: SoftwareEngineer
     },
     render: (args, story) => renderMessage(args, story, 'error-message')
 };
 
-/** @type {StoryObj} */
+/** @type {StoryType} */
 export const Test = {
     args: {
         ...Default.args,
@@ -88,7 +82,7 @@ export const Test = {
     },
     render: (args, story) => renderMessage(args, story, 'info-message'),
 
-    play: async (/** @type {StoryContext} */ { canvasElement, step }) => {
+    play: async ({ canvasElement, step }) => {
         const setup = await playSetup(canvasElement, 'info-message');
         const { canvas, messageNode } = setup;
 
@@ -149,5 +143,4 @@ export const Test = {
     }
 };
 
-/** @type {Meta} */
 export default MessageStory;

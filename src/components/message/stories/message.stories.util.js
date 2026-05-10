@@ -46,10 +46,10 @@ export function getArgTypes(category = 'Message Props') {
  * Creates shared test strings and labels.
  * @param {number} [truncateContent]
  * @returns {{
- *   longMessage: string,
- *   truncatedMessage: string,
- *   readMoreLabel: string,
- *   closeLabel: string
+ * longMessage: string,
+ * truncatedMessage: string,
+ * readMoreLabel: string,
+ * closeLabel: string
  * }}
  */
 export function createTestLinks(truncateContent = 30) {
@@ -65,9 +65,10 @@ export function createTestLinks(truncateContent = 30) {
 /**
  * Sets up the message story test canvas and component node.
  * @param {HTMLElement} canvasElement
+ * @param {string} [tagName]
  * @returns {Promise<{
- *   canvas: ReturnType<typeof within>,
- *   messageNode: MessageComponent | null
+ * canvas: ReturnType<typeof within>,
+ * messageNode: MessageComponent | null
  * }>}
  */
 export async function playSetup(canvasElement, tagName = 'arpa-message') {
@@ -83,7 +84,7 @@ export async function playSetup(canvasElement, tagName = 'arpa-message') {
  * Renders a message component with the given args and story context.
  * @param {MessageConfigType} args
  * @param {import('@storybook/web-components-vite').StoryContext} story
- * @param {string} [messageTag='arpa-message']
+ * @param {string} messageTag
  * @returns {string}
  */
 export function renderMessage(args, story, messageTag = 'arpa-message') {
