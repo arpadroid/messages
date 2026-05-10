@@ -3,8 +3,8 @@
  * @typedef {import('@storybook/web-components-vite').StoryObj} StoryObj
  * @typedef {import('@storybook/web-components-vite').StoryContext} StoryContext
  * @typedef {import('../message.types.js').MessageConfigType} MessageConfigType
- * @typedef {import('@storybook/web-components-vite').Meta<MessageConfigType>} MetaType
- * @typedef {import('@storybook/web-components-vite').StoryObj<MessageConfigType>} StoryType
+ * @typedef {import('@storybook/web-components-vite').Meta<MessageConfigType>} Meta
+ * @typedef {import('@storybook/web-components-vite').StoryObj<MessageConfigType>} Story
  * @typedef {import('@storybook/web-components-vite').Args} Args
  */
 
@@ -12,7 +12,7 @@ import { expect, fireEvent, waitFor } from 'storybook/test';
 import { AmazingComputingFacts, ApolloMission, SoftwareEngineer, VideoGameHistory } from './templates.js';
 import { getArgs, playSetup, renderMessage } from './message.stories.util.js';
 
-/** @type {MetaType} */
+/** @type {Meta} */
 const MessageStory = {
     title: 'Messages/Message',
     component: 'arpa-message',
@@ -24,7 +24,7 @@ const MessageStory = {
     render: (args, story) => renderMessage(args, story, 'info-message')
 };
 
-/** @type {StoryType} */
+/** @type {Story} */
 export const Default = {
     name: 'Plain Message',
     parameters: {},
@@ -34,7 +34,7 @@ export const Default = {
     }
 };
 
-/** @type {StoryType} */
+/** @type {Story} */
 export const InfoMessage = {
     args: {
         text: AmazingComputingFacts
@@ -43,7 +43,7 @@ export const InfoMessage = {
     render: (args, story) => renderMessage(args, story, 'info-message')
 };
 
-/** @type {StoryType} */
+/** @type {Story} */
 export const SuccessMessage = {
     args: {
         text: ApolloMission
@@ -51,7 +51,7 @@ export const SuccessMessage = {
     render: (args, story) => renderMessage(args, story, 'success-message')
 };
 
-/** @type {StoryType} */
+/** @type {Story} */
 export const WarningMessage = {
     args: {
         text: VideoGameHistory
@@ -59,7 +59,7 @@ export const WarningMessage = {
     render: (args, story) => renderMessage(args, story, 'warning-message')
 };
 
-/** @type {StoryType} */
+/** @type {Story} */
 export const ErrorMessage = {
     args: {
         text: SoftwareEngineer
@@ -67,7 +67,7 @@ export const ErrorMessage = {
     render: (args, story) => renderMessage(args, story, 'error-message')
 };
 
-/** @type {StoryType} */
+/** @type {Story} */
 export const Test = {
     args: {
         ...Default.args,

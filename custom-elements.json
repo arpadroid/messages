@@ -407,6 +407,339 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/infoMessage/infoMessage.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "InfoMessage",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getDefaultConfig",
+              "description": "Returns the default config.",
+              "return": {
+                "type": {
+                  "text": "MessageConfigType"
+                }
+              },
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "MessageConfigType"
+              },
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getTimeout",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContent",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getI18nContent",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getTruncateTextNode",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hasReadMoreButton",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hasTextToggle",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "canClose",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderRhs",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderCloseButton",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onConnected",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "handleTimeout",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_initializeNodes",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onComplete",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onTextClick",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "description": "When the text is clicked, it will toggle the truncate state.",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_onClose",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "close",
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "Message",
+            "module": "/src/components/message/message.js"
+          },
+          "tagName": "info-message",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "text",
+              "type": {
+                "text": "string",
+                "summary": "string"
+              },
+              "serializedAs": "string",
+              "description": "TS type: string",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "timeout",
+              "type": {
+                "text": "number",
+                "summary": "number"
+              },
+              "serializedAs": "number",
+              "description": "TS type: number",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "can-close",
+              "type": {
+                "text": "boolean",
+                "summary": "boolean"
+              },
+              "serializedAs": "boolean-attr",
+              "description": "TS type: boolean",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "close-label",
+              "type": {
+                "text": "string",
+                "summary": "string"
+              },
+              "serializedAs": "string",
+              "description": "TS type: string",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "icon",
+              "type": {
+                "text": "string",
+                "summary": "string"
+              },
+              "serializedAs": "string",
+              "description": "TS type: string",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "truncate-content",
+              "type": {
+                "text": "number",
+                "summary": "number"
+              },
+              "serializedAs": "number",
+              "description": "TS type: number",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "type",
+              "type": {
+                "text": "'info' | 'success' | 'warning' | 'error' | 'arpa'",
+                "summary": "unknown"
+              },
+              "serializedAs": "string",
+              "description": "TS type: 'info' | 'success' | 'warning' | 'error' | 'arpa'",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "on-close",
+              "type": {
+                "text": "() => void",
+                "summary": "unknown"
+              },
+              "serializedAs": "property-only",
+              "description": "TS type: () => void",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "node",
+              "type": {
+                "text": "HTMLElement",
+                "summary": "unknown"
+              },
+              "serializedAs": "property-only",
+              "description": "TS type: HTMLElement",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            },
+            {
+              "name": "resource",
+              "type": {
+                "text": "ListResource",
+                "summary": "unknown"
+              },
+              "serializedAs": "property-only",
+              "description": "TS type: ListResource",
+              "optional": true,
+              "inheritedFrom": {
+                "name": "Message",
+                "module": "src/components/message/message.js"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "InfoMessage",
+            "module": "src/components/infoMessage/infoMessage.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/message/message.js",
       "declarations": [
         {
@@ -905,339 +1238,6 @@
           "declaration": {
             "name": "Messages",
             "module": "src/components/messages/messages.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/infoMessage/infoMessage.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "InfoMessage",
-          "members": [
-            {
-              "kind": "method",
-              "name": "getDefaultConfig",
-              "description": "Returns the default config.",
-              "return": {
-                "type": {
-                  "text": "MessageConfigType"
-                }
-              },
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_config",
-              "type": {
-                "text": "MessageConfigType"
-              },
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getTimeout",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContent",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getI18nContent",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getTruncateTextNode",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "hasReadMoreButton",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "hasTextToggle",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "canClose",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderRhs",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderCloseButton",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "_onConnected",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "handleTimeout",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "_initializeNodes",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "_onComplete",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "_onTextClick",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ],
-              "description": "When the text is clicked, it will toggle the truncate state.",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "_onClose",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "close",
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "Message",
-            "module": "/src/components/message/message.js"
-          },
-          "tagName": "info-message",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "text",
-              "type": {
-                "text": "string",
-                "summary": "string"
-              },
-              "serializedAs": "string",
-              "description": "TS type: string",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "timeout",
-              "type": {
-                "text": "number",
-                "summary": "number"
-              },
-              "serializedAs": "number",
-              "description": "TS type: number",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "can-close",
-              "type": {
-                "text": "boolean",
-                "summary": "boolean"
-              },
-              "serializedAs": "boolean-attr",
-              "description": "TS type: boolean",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "close-label",
-              "type": {
-                "text": "string",
-                "summary": "string"
-              },
-              "serializedAs": "string",
-              "description": "TS type: string",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "icon",
-              "type": {
-                "text": "string",
-                "summary": "string"
-              },
-              "serializedAs": "string",
-              "description": "TS type: string",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "truncate-content",
-              "type": {
-                "text": "number",
-                "summary": "number"
-              },
-              "serializedAs": "number",
-              "description": "TS type: number",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "type",
-              "type": {
-                "text": "'info' | 'success' | 'warning' | 'error' | 'arpa'",
-                "summary": "unknown"
-              },
-              "serializedAs": "string",
-              "description": "TS type: 'info' | 'success' | 'warning' | 'error' | 'arpa'",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "on-close",
-              "type": {
-                "text": "() => void",
-                "summary": "unknown"
-              },
-              "serializedAs": "property-only",
-              "description": "TS type: () => void",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "node",
-              "type": {
-                "text": "HTMLElement",
-                "summary": "unknown"
-              },
-              "serializedAs": "property-only",
-              "description": "TS type: HTMLElement",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            },
-            {
-              "name": "resource",
-              "type": {
-                "text": "ListResource",
-                "summary": "unknown"
-              },
-              "serializedAs": "property-only",
-              "description": "TS type: ListResource",
-              "optional": true,
-              "inheritedFrom": {
-                "name": "Message",
-                "module": "src/components/message/message.js"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "InfoMessage",
-            "module": "src/components/infoMessage/infoMessage.js"
           }
         }
       ]
