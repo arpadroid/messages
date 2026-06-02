@@ -1,14 +1,10 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 /**
- * @typedef {import('@storybook/web-components-vite').StoryObj} StoryObj
- * @typedef {import('@storybook/web-components-vite').StoryContext} StoryContext
  * @typedef {import('../message.types.js').MessageConfigType} MessageConfigType
  * @typedef {import('@storybook/web-components-vite').Meta<MessageConfigType>} Meta
  * @typedef {import('@storybook/web-components-vite').StoryObj<MessageConfigType>} Story
- * @typedef {import('@storybook/web-components-vite').Args} Args
  */
 
-import { expect, fireEvent, waitFor } from 'storybook/test';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { AmazingComputingFacts, ApolloMission, SoftwareEngineer, VideoGameHistory } from './templates.js';
 import { getArgs, playSetup, renderMessage } from './message.stories.util.js';
 
@@ -73,7 +69,8 @@ export const Test = {
         ...Default.args,
         text: 'This is a test message',
         canClose: true,
-        truncateContent: 30
+        truncateContent: 27,
+        truncateButton: true
     },
     parameters: {
         controls: { disable: true },
@@ -85,47 +82,46 @@ export const Test = {
     play: async ({ canvasElement, step }) => {
         const setup = await playSetup(canvasElement, 'info-message');
         const { canvas, messageNode } = setup;
+        const ReadMoreButton = canvas.queryAllByRole('button', { name: /Read more/i })[0];
 
-        const ReadMoreButton = canvas.getByRole('button', { name: 'Read more' });
+        await step('Renders the message', async () => {
+            await waitFor(() => expect(messageNode).not.toBeNull());
 
-        await step('Renders the message', () => {
             expect(ReadMoreButton).toBeInTheDocument();
             expect(canvas.getByText('This is a test message')).toBeTruthy();
             expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
         });
-        /** @type {HTMLButtonElement | null} */
-        let deleteButton;
-        await step('Renders the close button', async () => {
-            await waitFor(() => {
-                deleteButton = canvas.getByRole('button', { name: 'Delete test message' });
-                expect(deleteButton).toBeTruthy();
-            });
-        });
+        /** @type {HTMLButtonElement} */
+        const deleteButton = await waitFor(() => canvas.getByRole('button', { name: 'Delete test message' }));
         const longMessage = 'This is a test message with a lot of text larger than 30 characters';
-        const truncatedMessage = longMessage.slice(0, 30).trim();
-        console.log('truncatedMessage', truncatedMessage);
+        const truncatedMessage = longMessage.slice(0, 28).trim();
+
+        await step('Renders the close button', async () => {
+            expect(deleteButton).toBeInTheDocument();
+        });
+
         await step(
             'Sets a message to something longer than the truncateContent value abd checks that it is truncated',
             async () => {
                 messageNode?.setContent(longMessage);
                 await waitFor(() => {
-                    const truncatedText = longMessage.slice(0, 30).trim();
-                    expect(canvas.getByText('...')).toBeTruthy();
-                    expect(canvas.getByText(truncatedText)).toBeTruthy();
+                    expect(canvas.getByText('...')).toBeInTheDocument();
+                    expect(canvas.getByText(truncatedMessage)).toBeInTheDocument();
                 });
             }
         );
 
         await step('Clicks on read more button and checks that text is not truncated', async () => {
-            ReadMoreButton.click();
+            await userEvent.click(ReadMoreButton);
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
+                expect(canvas.queryByText('...')).not.toBeInTheDocument();
+                expect(canvas.getByRole('button', { name: 'read less' })).toBeInTheDocument();
             });
         });
 
         await step('Clicks on read less button and checks that text is truncated', async () => {
-            await new Promise(resolve => setTimeout(resolve, 100));
-            fireEvent.click(canvas.getByRole('button', { name: 'Read more' }));
+            await userEvent.click(canvas.getByRole('button', { name: 'read less' }));
             await waitFor(() => {
                 expect(canvas.getByText(truncatedMessage)).toBeTruthy();
                 expect(canvas.getByText('...')).toBeTruthy();
@@ -134,10 +130,9 @@ export const Test = {
 
         await step('Clicks on close button and checks that message is removed', async () => {
             expect(canvas.getByText(truncatedMessage)).toBeTruthy();
-            deleteButton && fireEvent.click(deleteButton);
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await userEvent.click(deleteButton);
             await waitFor(() => {
-                expect(canvas.queryByText(truncatedMessage)).toBeFalsy();
+                expect(canvas.queryByText(truncatedMessage)).not.toBeInTheDocument();
             });
         });
     }

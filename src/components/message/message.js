@@ -66,7 +66,7 @@ class Message extends ListItem {
     /////////////////////////
 
     hasReadMoreButton() {
-        return this.getProperty('has-read-more-button');
+        return this.getProperty('has-button');
     }
 
     hasTextToggle() {
