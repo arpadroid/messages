@@ -106,8 +106,8 @@ class Message extends ListItem {
     // #region Lifecycle
     /////////////////////////////
 
-    _onConnected() {
-        super._onConnected();
+    $onConnected() {
+        super.$onConnected();
         this.handleTimeout();
     }
 
@@ -118,8 +118,8 @@ class Message extends ListItem {
         }
     }
 
-    async _initializeNodes() {
-        await super._initializeNodes();
+    async $initializeNodes() {
+        await super.$initializeNodes();
         /** @type {TruncateText | null} */
         this.truncateComponent = this.getTruncateTextNode();
         /** @type {HTMLElement | null} */
@@ -128,14 +128,14 @@ class Message extends ListItem {
         return true;
     }
 
-    _onComplete() {
+    $onComplete() {
         if (this.hasTextToggle()) {
             this.mainNode?.setAttribute('role', 'button');
             this.mainNode?.setAttribute('tabindex', '0');
             this.mainNode?.setAttribute('aria-label', 'Read more');
             this._config.action = this._onTextClick;
         }
-        super._onComplete();
+        super.$onComplete();
         this.classList.add('message--open');
     }
 
