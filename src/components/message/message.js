@@ -41,15 +41,15 @@ class Message extends ListItem {
     /////////////////////////
 
     getTimeout() {
-        return parseFloat(this.getProperty('timeout'));
+        return parseFloat(this.getProp('timeout'));
     }
 
     getContent() {
-        return super.getContent() || this.getProperty('text') || this.getI18nContent();
+        return super.getContent() || this.getProp('text') || this.getI18nContent();
     }
 
     getI18nContent() {
-        const i18nKey = this.getProperty('i18n');
+        const i18nKey = this.getProp('i18n');
         return i18nKey ? html`<i18n-text key="${i18nKey}"></i18n-text>` : '';
     }
 
@@ -66,7 +66,7 @@ class Message extends ListItem {
     /////////////////////////
 
     hasReadMoreButton() {
-        return this.getProperty('has-button');
+        return this.getProp('has-button');
     }
 
     hasTextToggle() {
@@ -88,7 +88,7 @@ class Message extends ListItem {
     }
 
     renderCloseButton() {
-        const label = this.getProperty('close-label');
+        const label = this.getProp('close-label');
         return render(
             this.canClose(),
             html`<icon-button

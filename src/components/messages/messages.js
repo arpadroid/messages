@@ -43,7 +43,7 @@ class Messages extends List {
      * @param {boolean} prepend
      * @returns {MessageType | undefined}
      */
-    addMessage(message, prepend = this.getProperty('prependNewMessages') ?? true) {
+    addMessage(message, prepend = this.getProp('prependNewMessages') ?? true) {
         return this.listResource?.addItem(message, true, prepend);
     }
 
