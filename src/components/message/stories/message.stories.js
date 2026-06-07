@@ -116,12 +116,12 @@ export const Test = {
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
                 expect(canvas.queryByText('...')).not.toBeInTheDocument();
-                expect(canvas.getByRole('button', { name: 'read less' })).toBeInTheDocument();
+                expect(canvas.getByRole('button', { name: /read less/i })).toBeInTheDocument();
             });
         });
 
         await step('Clicks on read less button and checks that text is truncated', async () => {
-            await userEvent.click(canvas.getByRole('button', { name: 'read less' }));
+            await userEvent.click(canvas.getByRole('button', { name: /read less/i }));
             await waitFor(() => {
                 expect(canvas.getByText(truncatedMessage)).toBeTruthy();
                 expect(canvas.getByText('...')).toBeTruthy();
