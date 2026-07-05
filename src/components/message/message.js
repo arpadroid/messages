@@ -2,15 +2,13 @@
  * @typedef {import('./message.types').MessageConfigType} MessageConfigType
  * @typedef {import('../messages/messages.js').default} MessagesComponent
  * @typedef {import('@arpadroid/ui').TruncateText} TruncateText
+ * @typedef {import('@arpadroid/ui').Button} Button
  */
-import { defineCustomElement, listen, mergeObjects, render } from '@arpadroid/tools';
+import { defineCustomElement, listen, mergeObjects } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
+
 const html = String.raw;
 class Message extends ListItem {
-    ///////////////////////////////
-    // #region Initialization
-    //////////////////////////////
-
     /** @type {MessageConfigType} */
     _config = this._config;
 
@@ -26,15 +24,24 @@ class Message extends ListItem {
             classNames: ['message'],
             canClose: false,
             icon: 'chat_bubble',
-            timeout: 0,
             truncateContent: 190,
-            listSelector: 'arpa-messages'
+            listSelector: 'arpa-messages',
+            hasTextToggle: false,
+            rhs: () =>
+                html`<arpa-node
+                    tag="icon-button"
+                    name="closeButton"
+                    class-names="iconButton--mini"
+                    class-name="message__closeButton"
+                    icon="close"
+                    variant="minimal"
+                    label="${this.getProp('closeLabel')}"
+                    can-render="canClose"
+                ></arpa-node>`
         };
 
         return mergeObjects(super.getDefaultConfig(), config);
     }
-
-    // #endregion
 
     //////////////////////////
     // #region Get
@@ -54,57 +61,13 @@ class Message extends ListItem {
     }
 
     getTruncateTextNode() {
-        return /** @type {TruncateText | null} */ (
-            this.contentNode?.tagName === 'TRUNCATE-TEXT' ? this.contentNode : null
-        );
+        const { content } = this.nodes;
+        return /** @type {TruncateText | null} */ (content?.tagName === 'TRUNCATE-TEXT' ? content : null);
     }
 
-    // #endregion Get
-
-    //////////////////////////
-    // #region Has
-    /////////////////////////
-
-    hasReadMoreButton() {
-        return this.getProp('has-button');
+    canRenderRhs() {
+        return super.canRenderRhs() || this.getProp('canClose');
     }
-
-    hasTextToggle() {
-        return !this.hasReadMoreButton() && this.truncateComponent;
-    }
-
-    canClose() {
-        return this.hasAttribute('can-close') || this._config.canClose;
-    }
-
-    // #endregion
-
-    ////////////////////////////
-    // #region RENDERING
-    ////////////////////////////
-
-    renderRhs() {
-        return super.renderRhs(this.renderCloseButton());
-    }
-
-    renderCloseButton() {
-        const label = this.getProp('close-label');
-        return render(
-            this.canClose(),
-            html`<icon-button
-                class="message__closeButton iconButton--mini"
-                icon="close"
-                variant="minimal"
-                label="${label}"
-            ></icon-button>`
-        );
-    }
-
-    // #endregion
-
-    /////////////////////////////
-    // #region Lifecycle
-    /////////////////////////////
 
     $onConnected() {
         super.$onConnected();
@@ -122,21 +85,37 @@ class Message extends ListItem {
         await super.$initializeNodes();
         /** @type {TruncateText | null} */
         this.truncateComponent = this.getTruncateTextNode();
-        /** @type {HTMLElement | null} */
-        this.closeButton = this.querySelector('.message__closeButton');
-        this.closeButton && listen(this.closeButton, 'click', this._onClose);
+        this.closeButtonComponent = /** @type {Button | null} */ (this.nodes.closeButton);
+        this.closeButtonComponent?.promise.then(() => {
+            this.closeButton = this.closeButtonComponent?.button;
+            this.closeButton && listen(this.closeButton, 'click', this._onClose);
+        });
         return true;
     }
 
     $onComplete() {
-        if (this.hasTextToggle()) {
-            this.mainNode?.setAttribute('role', 'button');
-            this.mainNode?.setAttribute('tabindex', '0');
-            this.mainNode?.setAttribute('aria-label', 'Read more');
-            this._config.action = this._onTextClick;
+        if (this.hasProp('hasTextToggle')) {
+            this.nodes.main?.setAttribute('role', 'button');
+            this.nodes.main?.setAttribute('tabindex', '0');
+            this.nodes.main?.setAttribute('aria-label', 'Read more');
+            this.actions.add(this._onTextClick);
         }
         super.$onComplete();
         this.classList.add('message--open');
+    }
+
+    disconnectedCallback() {
+        this.timeout && clearTimeout(this.timeout);
+    }
+
+    // #endregion Lifecycle
+
+    async close() {
+        this.classList.add('message--closing');
+        setTimeout(() => {
+            this.listResource?.removeItem({ id: this.id });
+            this.remove();
+        }, 800);
     }
 
     /**
@@ -157,27 +136,6 @@ class Message extends ListItem {
         typeof onClose === 'function' && onClose();
         this.close();
     }
-
-    disconnectedCallback() {
-        clearTimeout(this.timeout);
-    }
-
-    // #endregion Lifecycle
-
-    //////////////////////////
-    // #region API
-    /////////////////////////
-
-    async close() {
-        this.classList.add('message--closing');
-        setTimeout(() => {
-            // @ts-ignore
-            this.resource?.deleteMessage(this._config);
-            this.remove();
-        }, 800);
-    }
-
-    // #endregion
 }
 
 defineCustomElement('arpa-message', Message);
