@@ -64,8 +64,11 @@ export const ErrorMessage = {
     render: (args, story) => renderMessage(args, story, 'error-message')
 };
 
+const longMessage = 'This is a test message with a lot of text larger than 30 characters';
+const truncatedMessage = longMessage.slice(0, 28).trim();
+
 /** @type {Story} */
-export const Test = {
+export const WithButton = {
     args: {
         ...Default.args,
         text: 'This is a test message',
@@ -73,7 +76,7 @@ export const Test = {
         truncateContent: 27,
         truncateButton: true,
         closeLabel: 'Delete test message',
-        hasTextToggle: true
+        hasTextToggle: false
     },
     parameters: testParams,
     play: async ({ canvasElement, step }) => {
@@ -88,8 +91,6 @@ export const Test = {
         });
         /** @type {HTMLButtonElement} */
         const deleteButton = await waitFor(() => canvas.getByRole('button', { name: 'Delete test message' }));
-        const longMessage = 'This is a test message with a lot of text larger than 30 characters';
-        const truncatedMessage = longMessage.slice(0, 28).trim();
 
         await step('Renders the close button', async () => {
             expect(deleteButton).toBeInTheDocument();
@@ -124,27 +125,50 @@ export const Test = {
             });
         });
 
-        await step(
-            'hasTextToggle is true and checks that clicking on the text itself actions the truncation toggle',
-            async () => {
-                const textNode = canvas.getByText(truncatedMessage);
-                await userEvent.click(textNode);
-                await waitFor(() => {
-                    expect(canvas.getByText(longMessage)).toBeTruthy();
-                    expect(canvas.queryByText('...')).not.toBeInTheDocument();
-                });
-            }
-        );
-
         await step('Clicks on close button and checks that message is removed', async () => {
             const deleteButton = await waitFor(() =>
                 canvas.getByRole('button', { name: 'Delete test message' })
             );
 
-            expect(canvas.getByText(longMessage)).toBeTruthy();
+            expect(canvas.getByText(truncatedMessage)).toBeTruthy();
             await userEvent.click(deleteButton);
             await waitFor(() => {
                 expect(canvas.queryByText(longMessage)).not.toBeInTheDocument();
+            });
+        });
+    }
+};
+
+/** @type {Story} */
+export const WithTextHandler = {
+    args: {
+        text: longMessage,
+        canClose: true,
+        truncateContent: 27,
+        icon: 'chat_bubble',
+        truncateButton: 'false',
+        closeLabel: 'Delete test message',
+        hasTextToggle: true
+    },
+    parameters: testParams,
+    play: async ({ canvasElement, step, args }) => {
+        const setup = await playSetup(canvasElement, 'info-message');
+        const { canvas } = setup;
+
+        await step('Renders the message', async () => {
+            await waitFor(() => {
+                expect(canvas.getByText(longMessage)).toBeInTheDocument();
+                expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
+            });
+        });
+        /** @type {HTMLButtonElement} */
+
+        await step('clicking on the text itself actions the truncation toggle', async () => {
+            const textNode = canvas.getByText(truncatedMessage);
+            await userEvent.click(textNode);
+            await waitFor(() => {
+                expect(canvas.getByText(longMessage)).toBeTruthy();
+                expect(canvas.queryByText('...')).not.toBeInTheDocument();
             });
         });
     }

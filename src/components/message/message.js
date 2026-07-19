@@ -17,7 +17,8 @@ class Message extends ListItem {
      * @returns {MessageConfigType}
      */
     getDefaultConfig() {
-        this.bind('_onTextClick', '_onClose');
+        this.bind('onClose', 'onTextClick');
+
         /** @type {MessageConfigType} */
         const config = {
             closeLabel: 'Close',
@@ -29,6 +30,7 @@ class Message extends ListItem {
             hasTextToggle: false,
             rhs: () =>
                 html`<arpa-node
+                    on-click="{onClose}"
                     tag="icon-button"
                     name="closeButton"
                     class-names="iconButton--mini"
@@ -41,6 +43,13 @@ class Message extends ListItem {
         };
 
         return mergeObjects(super.getDefaultConfig(), config);
+    }
+
+    $initialize() {
+        super.$initialize();
+        if (this.hasProp('hasTextToggle')) {
+            this.actions?.add(this.onTextClick);
+        }
     }
 
     //////////////////////////
@@ -69,8 +78,8 @@ class Message extends ListItem {
         return super.canRenderRhs() || this.getProp('canClose');
     }
 
-    $onConnected() {
-        super.$onConnected();
+    _preRender() {
+        super._preRender();
         this.handleTimeout();
     }
 
@@ -85,11 +94,6 @@ class Message extends ListItem {
         await super.$initializeNodes();
         /** @type {TruncateText | null} */
         this.truncateComponent = this.getTruncateTextNode();
-        this.closeButtonComponent = /** @type {Button | null} */ (this.nodes.closeButton);
-        this.closeButtonComponent?.promise.then(() => {
-            this.closeButton = this.closeButtonComponent?.button;
-            this.closeButton && listen(this.closeButton, 'click', this._onClose);
-        });
         return true;
     }
 
@@ -98,7 +102,6 @@ class Message extends ListItem {
             this.nodes.main?.setAttribute('role', 'button');
             this.nodes.main?.setAttribute('tabindex', '0');
             this.nodes.main?.setAttribute('aria-label', 'Read more');
-            this.actions.add(this._onTextClick);
         }
         super.$onComplete();
         this.classList.add('message--open');
@@ -118,20 +121,12 @@ class Message extends ListItem {
         }, 800);
     }
 
-    /**
-     * When the text is clicked, it will toggle the truncate state.
-     * @param {Event} event
-     */
-    _onTextClick(event) {
-        const target = /** @type {HTMLElement} */ (event.target);
-        const interactiveSelector = 'a, button, input, textarea, select';
-        if (target?.closest(interactiveSelector)) {
-            return;
-        }
+    onTextClick() {
         this.truncateComponent?.toggleTruncate();
     }
 
-    _onClose() {
+    async onClose() {
+        await this.promise;
         const { onClose } = this._config;
         typeof onClose === 'function' && onClose();
         this.close();

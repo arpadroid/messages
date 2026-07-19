@@ -7,7 +7,7 @@
  * @typedef {import('@arpadroid/resources').ListResourceItemType} ListResourceItemType
  */
 
-import { expect, waitFor, within } from 'storybook/test';
+import { expect, waitFor, within, userEvent } from 'storybook/test';
 import { defaultParams, testParams } from '@arpadroid/module/storybook/helper';
 import { $attr } from '@arpadroid/tools';
 
@@ -92,7 +92,7 @@ export const Test = {
                 expect(closeButton).toBeTruthy();
             });
 
-            closeButton?.click();
+            await userEvent.click(closeButton);
 
             await waitFor(() => {
                 expect(canvas.queryByText('This is an error message')).toBeNull();
