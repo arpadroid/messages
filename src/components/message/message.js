@@ -4,7 +4,7 @@
  * @typedef {import('@arpadroid/ui').TruncateText} TruncateText
  * @typedef {import('@arpadroid/ui').Button} Button
  */
-import { defineCustomElement, listen, mergeObjects } from '@arpadroid/tools';
+import { defineCustomElement, mergeObjects } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
 
 const html = String.raw;
