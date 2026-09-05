@@ -49,9 +49,8 @@ export const Test = {
     },
     parameters: testParams,
     play: async ({ canvasElement, step, canvas }) => {
-        await customElements.whenDefined('arpa-messages');
         const messages = /** @type {Messages | null} */ (canvasElement.querySelector('arpa-messages'));
-
+        await messages?.promise;
         await step('Renders the messages', async () => {
             await waitFor(() => {
                 expect(canvas.getByText('This is a test message')).toBeTruthy();
