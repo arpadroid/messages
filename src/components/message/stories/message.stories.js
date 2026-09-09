@@ -73,7 +73,7 @@ export const WithButton = {
     parameters: testParams,
     play: async ({ canvas, canvasElement, step }) => {
         const messageNode = /** @type {Message} */ (canvasElement.querySelector('arpa-message'));
-        await messageNode.promise;
+        await messageNode.waitForArpaNodes();
 
         await step('Renders the message', async () => {
             await waitFor(() => {
@@ -91,17 +91,18 @@ export const WithButton = {
         await step(
             'Sets a message to something longer than the truncateContent value and checks that it is truncated',
             async () => {
-                messageNode?.setContent(longMessage);
+                await messageNode?.setContent(longMessage);
                 await waitFor(() => {
                     expect(canvas.getByText('...')).toBeInTheDocument();
                     expect(canvas.getByText(truncatedMessage)).toBeInTheDocument();
+                    expect(canvas.getByRole('button', { name: /read more/i })).toBeInTheDocument();
                 });
             }
         );
 
         await step('Clicks on read more button and checks that text is not truncated', async () => {
-            const readMoreButton = await canvas.getAllByRole('button', { name: /read more/i });
-            await userEvent.click(readMoreButton[0]);
+            const readMoreButton = canvas.getByRole('button', { name: /read more/i });
+            await userEvent.click(readMoreButton);
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
                 expect(canvas.queryByText('...')).not.toBeInTheDocument();
