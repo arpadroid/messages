@@ -73,7 +73,6 @@ export const WithButton = {
     parameters: testParams,
     play: async ({ canvas, canvasElement, step }) => {
         const messageNode = /** @type {Message} */ (canvasElement.querySelector('arpa-message'));
-        await messageNode.waitForArpaNodes();
 
         await step('Renders the message', async () => {
             await waitFor(() => {
