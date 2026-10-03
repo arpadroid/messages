@@ -2,11 +2,13 @@ arpa-messages {
     display: flex;
     flex-direction: column;
     width: 100%;
+
     .message:not(:only-child) {
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
     }
 }
 
-arpa-messages:empty {
+.arpaForm__messages.arpaForm__messages:empty {
     display: none;
+    margin-bottom: 0;
 }
