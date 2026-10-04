@@ -110,7 +110,7 @@ warning-message.message {
 }
 
 .message__closeButton {
-    --icon-button-size: 2rem;
+    --size: 2rem;
 
     align-self: flex-start;
     margin-left: auto;
