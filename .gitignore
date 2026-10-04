@@ -1,4 +1,3 @@
-bundle-stats.html
 node_modules/
 *.bundled.css
 *.compiled.d.ts

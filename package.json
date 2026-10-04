@@ -36,8 +36,7 @@
     },
     "homepage": "https://github.com/arpadroid/messages#readme",
     "devDependencies": {
-        "@babel/core": "^7.28.6",
-        "@babel/preset-env": "^7.28.6"
+        "@babel/preset-env": "^8.0.2"
     },
     "peerDependencies": {
         "@arpadroid/i18n": "file:../i18n",

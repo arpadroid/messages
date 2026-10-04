@@ -1,55 +1,56 @@
 /**
- * @typedef {import('./messages').default} MessagesComponent
+ * @typedef {import('./messages').default} Messages
  * @typedef {import('../message/message.js').default} Message
- * @typedef {import('@storybook/web-components-vite').Meta} Meta
- * @typedef {import('@storybook/web-components-vite').StoryObj} StoryObj
- * @typedef {import('@storybook/web-components-vite').StoryContext} StoryContext
- * @typedef {import('@storybook/web-components-vite').Args} Args
+ * @typedef {import('./messages.types').MessagesConfigType} MessagesConfigType
+ * @typedef {import('@storybook/web-components-vite').Meta<MessagesConfigType>} Meta
+ * @typedef {import('@storybook/web-components-vite').StoryObj<MessagesConfigType>} Story
  * @typedef {import('@arpadroid/resources').ListResourceItemType} ListResourceItemType
  */
 
-import { expect, waitFor, within } from 'storybook/test';
-import { attrString } from '@arpadroid/tools';
-import { getArgs, getArgTypes, playSetup, renderMessages } from './messages.stories.util';
+import { expect, waitFor, within, userEvent } from 'storybook/test';
+import { defaultParams, testParams } from '@arpadroid/module/storybook/helper';
+import { $attr } from '@arpadroid/tools';
 
 const html = String.raw;
 
 /** @type {Meta} */
 const MessagesStory = {
+    component: 'arpa-messages',
     title: 'Messages/Messages',
     tags: [],
     parameters: {
         layout: 'padded'
     },
-    render: renderMessages
+    render: args => html`
+        <arpa-messages id="messages" ${$attr(args)}>
+            <arpa-message can-close truncate-content="30">This is a test message</arpa-message>
+            <info-message can-close truncate-content="30">This is an info message</info-message>
+            <success-message can-close truncate-content="30">This is a success message</success-message>
+            <warning-message can-close truncate-content="30">This is a warning message</warning-message>
+            <error-message can-close truncate-content="30">This is an error message</error-message>
+        </arpa-messages>
+    `
 };
 
-/** @type {StoryObj} */
+/** @type {Story} */
 export const Default = {
     name: 'Render',
-    parameters: {},
-    argTypes: getArgTypes(),
-    args: { ...getArgs() }
+    parameters: {
+        ...defaultParams
+    }
 };
 
-/** @type {StoryObj} */
+/** @type {Story} */
 export const Test = {
     args: {
         ...Default.args,
-        canClose: true,
-        truncateContent: 30,
         title: 'Messages Test',
         prependNewMessages: true
     },
-    parameters: {
-        controls: { disable: true },
-        usage: { disable: true },
-        options: { selectedPanel: 'storybook/interactions/panel' }
-    },
-    play: async ({ canvasElement, step }) => {
-        const setup = await playSetup(canvasElement);
-        const { canvas, messages } = setup;
-
+    parameters: testParams,
+    play: async ({ canvasElement, step, canvas }) => {
+        const messages = /** @type {Messages | null} */ (canvasElement.querySelector('arpa-messages'));
+        await messages?.promise;
         await step('Renders the messages', async () => {
             await waitFor(() => {
                 expect(canvas.getByText('This is a test message')).toBeTruthy();
@@ -90,7 +91,7 @@ export const Test = {
                 expect(closeButton).toBeTruthy();
             });
 
-            closeButton?.click();
+            await userEvent.click(closeButton);
 
             await waitFor(() => {
                 expect(canvas.queryByText('This is an error message')).toBeNull();
@@ -105,7 +106,7 @@ export const Test = {
         });
 
         await step('adds multiple messages', async () => {
-            messages?.addMessages([{ text: 'This is another new message' }, { text: newMessageText }]);
+            messages?.addMessages([{ content: 'This is another new message' }, { content: newMessageText }]);
             await waitFor(() => {
                 expect(canvas.getByText('This is a new message')).toBeTruthy();
                 expect(canvas.getByText('This is another new message')).toBeTruthy();
@@ -115,4 +116,3 @@ export const Test = {
 };
 
 export default MessagesStory;
-/** @type {Meta} */

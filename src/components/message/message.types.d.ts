@@ -5,6 +5,7 @@ export type MessageConfigType = ListItemConfigType & {
     text?: string;
     timeout?: number;
     canClose?: boolean;
+    hasTextToggle?: boolean;
     closeLabel?: string;
     icon?: string;
     truncateContent?: number;

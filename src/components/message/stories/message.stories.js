@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('../message.js').default} Message
  * @typedef {import('../message.types.js').MessageConfigType} MessageConfigType
  * @typedef {import('@storybook/web-components-vite').Meta<MessageConfigType>} Meta
  * @typedef {import('@storybook/web-components-vite').StoryObj<MessageConfigType>} Story
@@ -6,18 +7,23 @@
 
 import { expect, userEvent, waitFor } from 'storybook/test';
 import { AmazingComputingFacts, ApolloMission, SoftwareEngineer, VideoGameHistory } from './templates.js';
-import { getArgs, playSetup, renderMessage } from './message.stories.util.js';
+import { testParams } from '@arpadroid/module/storybook/helper';
+import { $attr } from '@arpadroid/tools';
+
+const html = String.raw;
 
 /** @type {Meta} */
 const MessageStory = {
-    title: 'Messages/Message',
     component: 'arpa-message',
+    title: 'Messages/Message',
     tags: [],
-    args: getArgs(),
+    beforeEach: async ({ canvasElement }) => {
+        canvasElement.querySelector('arpa-messages')?.remove();
+    },
     parameters: {
         layout: 'padded'
     },
-    render: (args, story) => renderMessage(args, story, 'info-message')
+    render: args => html`<arpa-message ${$attr(args)}>Test message</arpa-message>`
 };
 
 /** @type {Story} */
@@ -32,87 +38,70 @@ export const Default = {
 
 /** @type {Story} */
 export const InfoMessage = {
-    args: {
-        text: AmazingComputingFacts
-    },
-
-    render: (args, story) => renderMessage(args, story, 'info-message')
+    render: args => html`<info-message ${$attr(args)}>${AmazingComputingFacts}</info-message>`
 };
 
 /** @type {Story} */
 export const SuccessMessage = {
-    args: {
-        text: ApolloMission
-    },
-    render: (args, story) => renderMessage(args, story, 'success-message')
+    render: args => html`<success-message ${$attr(args)}>${ApolloMission}</success-message>`
 };
 
 /** @type {Story} */
 export const WarningMessage = {
-    args: {
-        text: VideoGameHistory
-    },
-    render: (args, story) => renderMessage(args, story, 'warning-message')
+    render: args => html`<warning-message ${$attr(args)}>${VideoGameHistory}</warning-message>`
 };
 
 /** @type {Story} */
 export const ErrorMessage = {
-    args: {
-        text: SoftwareEngineer
-    },
-    render: (args, story) => renderMessage(args, story, 'error-message')
+    render: args => html`<error-message ${$attr(args)}>${SoftwareEngineer}</error-message>`
 };
 
+const longMessage = 'This is a test message with a lot of text larger than 30 characters';
+const truncatedMessage = longMessage.slice(0, 28).trim();
+
 /** @type {Story} */
-export const Test = {
+export const WithButton = {
     args: {
-        ...Default.args,
-        text: 'This is a test message',
+        id: 'test-message-with-button',
         canClose: true,
         truncateContent: 27,
-        truncateButton: true
+        truncateButton: true,
+        closeLabel: 'Delete test message',
+        hasTextToggle: false
     },
-    parameters: {
-        controls: { disable: true },
-        usage: { disable: true },
-        options: { selectedPanel: 'storybook/interactions/panel' }
-    },
-    render: (args, story) => renderMessage(args, story, 'info-message'),
-
-    play: async ({ canvasElement, step }) => {
-        const setup = await playSetup(canvasElement, 'info-message');
-        const { canvas, messageNode } = setup;
-        const ReadMoreButton = canvas.queryAllByRole('button', { name: /Read more/i })[0];
+    render: args => html`<arpa-message ${$attr(args)}>This is a test message</arpa-message>`,
+    parameters: testParams,
+    play: async ({ canvas, canvasElement, step }) => {
+        const messageNode = /** @type {Message} */ (canvasElement.querySelector('arpa-message'));
 
         await step('Renders the message', async () => {
-            await waitFor(() => expect(messageNode).not.toBeNull());
-
-            expect(ReadMoreButton).toBeInTheDocument();
-            expect(canvas.getByText('This is a test message')).toBeTruthy();
-            expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
+            await waitFor(() => {
+                expect(canvas.getByText('This is a test message')).toBeTruthy();
+                expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
+            });
         });
+
         /** @type {HTMLButtonElement} */
         const deleteButton = await waitFor(() => canvas.getByRole('button', { name: 'Delete test message' }));
-        const longMessage = 'This is a test message with a lot of text larger than 30 characters';
-        const truncatedMessage = longMessage.slice(0, 28).trim();
-
         await step('Renders the close button', async () => {
             expect(deleteButton).toBeInTheDocument();
         });
 
         await step(
-            'Sets a message to something longer than the truncateContent value abd checks that it is truncated',
+            'Sets a message to something longer than the truncateContent value and checks that it is truncated',
             async () => {
-                messageNode?.setContent(longMessage);
+                await messageNode?.setContent(longMessage);
                 await waitFor(() => {
                     expect(canvas.getByText('...')).toBeInTheDocument();
                     expect(canvas.getByText(truncatedMessage)).toBeInTheDocument();
+                    expect(canvas.getByRole('button', { name: /read more/i })).toBeInTheDocument();
                 });
             }
         );
 
         await step('Clicks on read more button and checks that text is not truncated', async () => {
-            await userEvent.click(ReadMoreButton);
+            const readMoreButton = canvas.getByRole('button', { name: /read more/i });
+            await userEvent.click(readMoreButton);
             await waitFor(() => {
                 expect(canvas.getByText(longMessage)).toBeTruthy();
                 expect(canvas.queryByText('...')).not.toBeInTheDocument();
@@ -129,10 +118,49 @@ export const Test = {
         });
 
         await step('Clicks on close button and checks that message is removed', async () => {
+            const deleteButton = await waitFor(() =>
+                canvas.getByRole('button', { name: 'Delete test message' })
+            );
+
             expect(canvas.getByText(truncatedMessage)).toBeTruthy();
             await userEvent.click(deleteButton);
             await waitFor(() => {
-                expect(canvas.queryByText(truncatedMessage)).not.toBeInTheDocument();
+                expect(canvas.queryByText(longMessage)).not.toBeInTheDocument();
+            });
+        });
+    }
+};
+
+/** @type {Story} */
+export const WithTextHandler = {
+    args: {
+        canClose: true,
+        truncateContent: 27,
+        icon: 'chat_bubble',
+        truncateButton: 'false',
+        closeLabel: 'Delete test message',
+        hasTextToggle: true
+    },
+    render: args => html`<arpa-message ${$attr(args)}>${longMessage}</arpa-message>`,
+    parameters: testParams,
+    play: async ({ canvasElement, step, canvas }) => {
+        const messageNode = /** @type {Message} */ (canvasElement.querySelector('arpa-message'));
+        await messageNode.promise;
+
+        await step('Renders the message', async () => {
+            await waitFor(() => {
+                expect(canvas.getByText(longMessage)).toBeInTheDocument();
+                expect(canvasElement.querySelector('.icon--chat_bubble')).toBeInTheDocument();
+            });
+        });
+
+        await step('clicking on the text itself actions the truncation toggle', async () => {
+            await waitFor(() => canvas.getByText(truncatedMessage));
+            const textNode = canvas.getByText(truncatedMessage);
+            await userEvent.click(textNode);
+            await waitFor(() => {
+                expect(canvas.getByText(longMessage)).toBeTruthy();
+                expect(canvas.queryByText('...')).not.toBeInTheDocument();
             });
         });
     }
