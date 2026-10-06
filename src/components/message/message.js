@@ -97,7 +97,7 @@ class Message extends ListItem {
         return true;
     }
 
-    $onComplete() {
+    async $onComplete() {
         if (this.hasProp('hasTextToggle')) {
             this.nodes.main?.setAttribute('role', 'button');
             this.nodes.main?.setAttribute('tabindex', '0');
@@ -105,6 +105,7 @@ class Message extends ListItem {
         }
         super.$onComplete();
         this.classList.add('message--open');
+        return true;
     }
 
     disconnectedCallback() {
