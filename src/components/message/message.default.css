@@ -17,15 +17,15 @@
 }
 
 .message.message {
-    gap: 4px;
+    gap: 0.25rem;
     align-items: center;
     padding: 0.75rem;
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: var(--msg-color);
     list-style-type: none;
     background-color: var(--msg-bg);
-    border-left: 4px solid var(--msg-border-color);
-    border-radius: 4px;
+    border-left: 0.25rem solid var(--msg-border-color);
+    border-radius: 0.25rem;
     box-shadow: var(--box-shadow);
     transition: all 0.6s var(--easeOutExpo);
 
@@ -52,7 +52,7 @@
     arpa-icon.icon {
         position: relative;
         align-self: flex-start;
-        font-size: 20px;
+        font-size: 1.25rem;
         color: var(--msg-icon-color);
     }
 
@@ -123,7 +123,7 @@ button.message__closeButton:focus {
 }
 
 button.message__closeButton .iconButton__content {
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--grey-600);
 }
 
