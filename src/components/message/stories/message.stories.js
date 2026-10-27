@@ -157,9 +157,9 @@ export const WithTextHandler = {
         await step('clicking on the text itself actions the truncation toggle', async () => {
             await waitFor(() => canvas.getByText(truncatedMessage));
             const textNode = canvas.getByText(truncatedMessage);
-            await userEvent.click(textNode);
+            await userEvent.click(textNode, { delay: 10 });
             await waitFor(() => {
-                expect(canvas.getByText(longMessage)).toBeTruthy();
+                expect(canvas.getByText(longMessage)).toBeInTheDocument();
                 expect(canvas.queryByText('...')).not.toBeInTheDocument();
             });
         });
