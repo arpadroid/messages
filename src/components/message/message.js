@@ -23,23 +23,11 @@ class Message extends ListItem {
         const config = {
             closeLabel: 'Close',
             classNames: ['message'],
-            canClose: false,
+            canClose: true,
             icon: 'chat_bubble',
             truncateContent: 190,
             listSelector: 'arpa-messages',
-            hasTextToggle: false,
-            rhs: () =>
-                html`<arpa-node
-                    on-click="{onClose}"
-                    tag="icon-button"
-                    name="closeButton"
-                    class-names="iconButton--mini"
-                    class-name="message__closeButton"
-                    icon="close"
-                    variant="minimal"
-                    label="${this.getProp('closeLabel')}"
-                    can-render="canClose"
-                ></arpa-node>`
+            hasTextToggle: false
         };
 
         return mergeObjects(super.getDefaultConfig(), config);
@@ -50,6 +38,28 @@ class Message extends ListItem {
         if (this.hasProp('hasTextToggle')) {
             this.actions?.add(this.onTextClick);
         }
+    }
+
+    $canRender() {
+        this._initializeListTemplate();
+        return true;
+    }
+
+    $renderTemplate() {
+        return html`
+            ${super.$renderTemplate()}
+            <arpa-node
+                on-click="{onClose}"
+                tag="icon-button"
+                name="closeButton"
+                class-names="iconButton--mini"
+                class-name="message__closeButton"
+                icon="close"
+                variant="minimal"
+                label="${this.getProp('closeLabel')}"
+                can-render="canClose"
+            ></arpa-node>
+        `;
     }
 
     //////////////////////////

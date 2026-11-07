@@ -4,6 +4,7 @@
  * @typedef {import('../message/message.js').default} Message
  * @typedef {import('@arpadroid/resources').ListResourceItemType} MessageType
  * @typedef {import('@arpadroid/tools').AbstractContentInterface} AbstractContentInterface
+ * @typedef {import('@arpadroid/ui').ArpaZone} ArpaZone
  */
 import { attrString, defineCustomElement, mergeObjects, renderNode } from '@arpadroid/tools';
 import { List } from '@arpadroid/lists';
@@ -139,7 +140,9 @@ class Messages extends List {
         delete config.type;
         delete config.content;
         const attrStr = attrString(config);
-        const messageHTML = html`<${type}-message ${attrStr}>${content}</${type}-message>`;
+        // The item reads payload.content itself; passing it as a child as well renders it twice.
+        const childContent = payload?.content ? '' : content;
+        const messageHTML = html`<${type}-message ${attrStr}>${childContent}</${type}-message>`;
         const item = /** @type {Message} */ (renderNode(messageHTML));
         payload && (item.payload = payload);
         mapping && (item.map = mapping);
@@ -148,6 +151,18 @@ class Messages extends List {
     }
 
     // #endregion
+
+    /**
+     * Called when a zone is placed in the element. Override this method to perform actions after a zone is placed.
+     * @param {ArpaZone} zone
+     * @param {Element | undefined} _container
+     * @param {NodeList | Node[]} _children
+     * @returns {Promise<undefined | boolean | void>}
+     */
+    async $onZoneInserted(zone, _container, _children) {
+        await zone.element?.onRendered();
+        return true;
+    }
 }
 
 defineCustomElement('arpa-messages', Messages);
