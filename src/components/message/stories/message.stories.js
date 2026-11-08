@@ -163,6 +163,11 @@ export const WithTextHandler = {
                 expect(canvas.queryByText('...')).not.toBeInTheDocument();
             });
         });
+
+        await step('Clicks on read less', async () => {
+            await userEvent.click(canvas.getByText(/read less/i));
+            await waitFor(() => canvas.getByText(truncatedMessage));
+        }); 
     }
 };
 

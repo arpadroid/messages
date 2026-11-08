@@ -132,7 +132,10 @@ class Message extends ListItem {
         }, 800);
     }
 
-    onTextClick() {
+    /**
+     * @param {Event} _event
+     */
+    onTextClick(_event) {
         this.truncateComponent?.toggleTruncate();
     }
 
