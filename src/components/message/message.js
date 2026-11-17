@@ -4,7 +4,7 @@
  * @typedef {import('@arpadroid/ui').TruncateText} TruncateText
  * @typedef {import('@arpadroid/ui').Button} Button
  */
-import { defineCustomElement, mergeObjects } from '@arpadroid/tools';
+import { $attr, defineCustomElement, mergeObjects } from '@arpadroid/tools';
 import { ListItem } from '@arpadroid/lists';
 
 const html = String.raw;
@@ -25,7 +25,7 @@ class Message extends ListItem {
             classNames: ['message'],
             canClose: true,
             icon: 'chat_bubble',
-            truncateContent: 190,
+            truncateLines: 1,
             listSelector: 'arpa-messages',
             hasTextToggle: false
         };
@@ -35,9 +35,7 @@ class Message extends ListItem {
 
     $initialize() {
         super.$initialize();
-        if (this.hasProp('hasTextToggle')) {
-            this.actions?.add(this.onTextClick);
-        }
+        this.hasProp('hasTextToggle') && this.actions?.add(this.onTextClick);
     }
 
     $canRender() {
@@ -45,20 +43,32 @@ class Message extends ListItem {
         return true;
     }
 
+    hasClamp() {
+        return !this.hasAttribute('truncate-content') && this.hasProp('truncateLines');
+    }
+
     $renderTemplate() {
         return html`
             ${super.$renderTemplate()}
-            <arpa-node
-                on-click="{onClose}"
-                tag="icon-button"
-                name="closeButton"
-                class-names="iconButton--mini"
-                class-name="message__closeButton"
-                icon="close"
-                variant="minimal"
-                label="${this.getProp('closeLabel')}"
-                can-render="canClose"
-            ></arpa-node>
+            <arpa-zone
+                prepend-content
+                name="${this.hasClamp() ? 'content' : 'contentWrapper'}"
+                ${$attr({
+                    childTarget: this.hasClamp() ? '.truncateText__content' : undefined
+                })}
+            >
+                <arpa-node
+                    on-click="{onClose}"
+                    tag="icon-button"
+                    owner-selector=".message"
+                    name="closeButton"
+                    class-names="iconButton--mini,message__closeButton"
+                    icon="close"
+                    variant="minimal"
+                    tooltip="${this.getProp('closeLabel')}"
+                    can-render="${this.hasProp('canClose')}"
+                ></arpa-node>
+            </arpa-zone>
         `;
     }
 

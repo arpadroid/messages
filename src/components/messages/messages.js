@@ -24,7 +24,10 @@ class Messages extends List {
             className: 'arpaMessages',
             renderMode: 'minimal',
             hasResource: true,
-            prependNewMessages: true
+            prependNewMessages: true,
+            attributes: {
+                role: 'list'
+            }
         };
         return mergeObjects(super.getDefaultConfig(), config);
     }

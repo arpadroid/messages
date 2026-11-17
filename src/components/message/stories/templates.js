@@ -1,4 +1,9 @@
 const html = String.raw;
+
+export const LongMessage = html`We only see a tiny slice: Ordinary matter (like stars, planets, and us) makes up only
+about 4.9% to 5% of the universe. The rest is made of dark matter (about 27%) and dark energy (about 68%),
+both of which remain deeply mysterious.`.replace(/\s+/g, ' ');
+
 /**
  * Returns sample text for the history of computing.
  * @returns {string} Sample text.

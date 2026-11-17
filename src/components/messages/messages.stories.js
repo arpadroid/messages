@@ -118,4 +118,30 @@ export const Test = {
     }
 };
 
+/** @type {Story} */
+export const Template = {
+    args: {
+        ...Default.args,
+        title: 'Messages Test',
+        prependNewMessages: true
+    },
+    parameters: testParams,
+    render: args => html`
+        <arpa-messages id="messages-with-line-clamp" ${$attr(args)}>
+            <template template-type="list-item" truncate-content="200"> </template>
+            <arpa-message>
+                The Louvre has a mailbox just for the Mona Lisa: Leonardo da Vinci’s Mona Lisa receives so
+                many love letters, poems, and flowers that the painting has its own dedicated mailbox at the
+                Louvre.
+            </arpa-message>
+            <info-message>
+                Ancient Greek statues were originally brightly painted. The white marble sculptures we see in
+                museums today were once painted in vivid colours like bright red, blue, and gold. Over
+                centuries, exposure to the elements and aggressive cleaning methods stripped the pigments
+                away, leaving only bare stone.
+            </info-message>
+        </arpa-messages>
+    `
+};
+
 export default MessagesStory;
