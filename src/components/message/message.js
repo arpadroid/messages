@@ -18,10 +18,10 @@ class Message extends ListItem {
      */
     getDefaultConfig() {
         this.bind('onClose', 'onTextClick');
-
+        this.i18nKey = 'messages.message';
         /** @type {MessageConfigType} */
         const config = {
-            closeLabel: 'Close',
+            closeLabel: this.i18nText('lblDismiss'),
             classNames: ['message'],
             canClose: true,
             icon: 'chat_bubble',

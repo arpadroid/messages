@@ -87,9 +87,9 @@ export const Test = {
             expect(lastMessage).toBeInTheDocument();
 
             await waitFor(() => {
-                expect(within(lastMessage).getByRole('button', { name: 'Close' })).toBeInTheDocument();
+                expect(within(lastMessage).getByRole('button', { name: 'Dismiss' })).toBeInTheDocument();
             });
-            const closeButton = within(lastMessage).getByRole('button', { name: 'Close' });
+            const closeButton = within(lastMessage).getByRole('button', { name: 'Dismiss' });
             await userEvent.click(closeButton, { delay: 20 });
 
             /**
@@ -128,7 +128,7 @@ export const Template = {
     parameters: testParams,
     render: args => html`
         <arpa-messages id="messages-with-line-clamp" ${$attr(args)}>
-            <template template-type="list-item" truncate-content="200"> </template>
+            <template template-type="list-item" truncate-content="100"> </template>
             <arpa-message>
                 The Louvre has a mailbox just for the Mona Lisa: Leonardo da Vinci’s Mona Lisa receives so
                 many love letters, poems, and flowers that the painting has its own dedicated mailbox at the
