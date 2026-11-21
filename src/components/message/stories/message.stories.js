@@ -41,9 +41,8 @@ export const TestTextHandler = {
     name: 'Test - text handler 🧪',
     args: {
         canClose: true,
-        truncateContent: 27,
+        truncateContent: 127,
         icon: 'chat_bubble',
-        truncateButton: 'false',
         closeLabel: 'Delete test message',
         hasTextToggle: true
     },
